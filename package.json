@@ -1,0 +1,23 @@
+{
+  "name": "@matrix-io/matrix-lite-nfc",
+  "version": "0.0.0",
+  "description": "> Under Very Early Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matrix-io/matrix-lite-nfc-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matrix-io/matrix-lite-nfc-js/issues"
+  },
+  "homepage": "https://github.com/matrix-io/matrix-lite-nfc-js#readme",
+  "dependencies": {
+    "nan": "^2.14.0",
+    "node-gyp": "^5.0.2"
+  }
+}
