@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/matrix-io/matrix-lite-nfc-js#readme",
   "dependencies": {
+    "@matrix-io/matrix-lite": "^0.4.3",
     "nan": "^2.14.0",
     "node-gyp": "^5.0.2"
   }

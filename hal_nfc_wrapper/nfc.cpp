@@ -1,20 +1,21 @@
 #include <nan.h>
 #include "nfc.h"
+#include "info.h"
 
-// Shared NFC objects
-matrix_hal::NFCSensor nfc_sensor;
-matrix_hal::NFCInfo nfc_info;
+matrix_hal::NFC nfc;
+matrix_hal::NFCData nfc_data;
 
-NAN_METHOD(recently_updated) {
-  // nfc_info.recently_updated
-}
+// Basis for NFC usage: Activate() -> Some_NFC_Function -> Deactivate()
+NAN_METHOD(activate)   {nfc.Activate();}
+NAN_METHOD(deactivate) {nfc.Deactivate();}
 
 // Node addon entry point
 NAN_MODULE_INIT(Initialize){
-  NAN_EXPORT(target, recently_updated);
-  
-  // Export functions that return JS objects
-  // NAN_EXPORT(target, read);
+  // Exported JS functions
+  NAN_EXPORT(target, activate);
+  NAN_EXPORT(target, deactivate);
+
+  NAN_EXPORT(target, info);
 }
 
 // Create a Node module called "addon"
