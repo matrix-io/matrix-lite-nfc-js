@@ -3,6 +3,8 @@
 #include "page.h"
 #include <iostream>
 
+// - Overwrite an existing NFC page.
+// Byte array given must be < 5.
 NAN_METHOD(writePage){
   // Grab desired page number
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("First argument must be a number"); return;}
@@ -26,6 +28,8 @@ NAN_METHOD(writePage){
   info.GetReturnValue().Set(statusCode);
 }
 
+// - Read a page from an NFC tag.
+// Data returned will be an array of 4 bytes
 NAN_METHOD(readPage){
   // Grab desired page number
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
