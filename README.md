@@ -14,9 +14,6 @@ This roadmap is for achieving a basic implementation of the checklist below.
 - [ ] Reading NDEF (MIFARE Ultralight & NTAG)
 - [ ] Writing NDEF (MIFARE Ultralight & NTAG)
 
-
-- waiting for [HAL NFC](https://github.com/matrix-io/matrix-hal-nfc) to mature.
-
 # Installation
 Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
 
