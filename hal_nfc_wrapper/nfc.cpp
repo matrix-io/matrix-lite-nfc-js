@@ -13,7 +13,7 @@ NAN_METHOD(activate)   {info.GetReturnValue().Set(nfc.Activate());}
 NAN_METHOD(deactivate) {nfc.Deactivate();}
 
 // Returns a string for the given status code.
-// Normally given by .activate()
+// given by: .Activate & .WritePage
 NAN_METHOD(status) {
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
 
