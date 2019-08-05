@@ -1,8 +1,18 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-let page = nfc.page();
-console.log(page);
+// - Read A Page (MIFARE Ultralight & NTAG)
+// let page = nfc.page();
+// data = [];
+
+// setInterval(function(){
+//     nfc.activate();
+//     data = page.read(1);
+//     nfc.deactivate(); 
+
+//     if (data.length > 0)
+//         console.log(data);
+// },0);
 
 // - Reading Info (All tags)
 // let info = nfc.info();

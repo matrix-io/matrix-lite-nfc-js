@@ -3,7 +3,7 @@
 #include "info.h"
 
 // - Populate nfc.data.info
-NAN_METHOD(read){
+NAN_METHOD(readInfo){
   // Read NFC tag
   nfc.ReadInfo(&nfc_data.info);
 
@@ -32,7 +32,7 @@ NAN_METHOD(info) {
 
   // Set Object Properties //
   Nan::Set(obj, Nan::New("read").ToLocalChecked(),
-  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(read)).ToLocalChecked());
+  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readInfo)).ToLocalChecked());
 
   // Return object
   info.GetReturnValue().Set(obj);
