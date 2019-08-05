@@ -10,7 +10,7 @@ setInterval(function(){
     data = info.read();
     nfc.deactivate(); 
 
-    if (data.recently_updated) {
+    if (data.updated) {
         console.log("********");
         console.log(data);
         matrix.led.set("green");
