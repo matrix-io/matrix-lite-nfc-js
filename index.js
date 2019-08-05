@@ -1,6 +1,25 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
+//////////////////////////////////////////////////////////////////
+// - Read Pages (MIFARE Ultralight & NTAG)
+let page = nfc.page();
+
+setInterval(function(){
+    nfc.activate();
+    let data = page.readAll();
+    nfc.deactivate(); 
+
+    console.log(data);
+    if (data.length > 0){
+        console.log("This tag had " + data.length + " pages");
+        process.exit(0);
+    }
+},1000);
+//////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////
 // - Write To A Page (MIFARE Ultralight & NTAG)
 // let page = nfc.page();
 
@@ -16,8 +35,10 @@ var matrix = require('@matrix-io/matrix-lite');
 //         console.log(nfc.status(code));
 //     }
 // }, 50);
+//////////////////////////////////////////////////////////////////
 
 
+//////////////////////////////////////////////////////////////////
 // - Read A Page (MIFARE Ultralight & NTAG)
 // let page = nfc.page();
 // data = [];
@@ -30,7 +51,10 @@ var matrix = require('@matrix-io/matrix-lite');
 //     if (data.length > 0)
 //         console.log(data);
 // },0);
+//////////////////////////////////////////////////////////////////
 
+
+//////////////////////////////////////////////////////////////////
 // - Reading Info (All tags)
 // let info = nfc.info();
 // let data = {};
@@ -48,3 +72,4 @@ var matrix = require('@matrix-io/matrix-lite');
 //         matrix.led.set("black");
 //     }
 // },50);
+//////////////////////////////////////////////////////////////////

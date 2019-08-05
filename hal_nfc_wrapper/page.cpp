@@ -3,6 +3,54 @@
 #include "page.h"
 #include <iostream>
 
+// - Return every page in an NFC tag.
+// Represented by an array holding 4 byte arrays
+NAN_METHOD(readPages){
+  // Grab all NFC tag pages
+  nfc.mful.ReadPages(&nfc_data.pages);
+  std::vector<std::vector<uint8_t>> pages = nfc_data.pages.content;
+
+  // JS array for all pages
+  v8::Local<v8::Array> js_all_pages = Nan::New<v8::Array>();
+
+  // Create a JS array for each page
+  for (int i = 0; i < pages.size(); i++){
+    v8::Local<v8::Array> js_page = Nan::New<v8::Array>();
+
+    // Populate each JS array
+    for (int j = 0; j < pages[i].size(); j++){
+      js_page->Set(j, Nan::New(pages[i][j]));
+    }
+
+    // Save the JS array
+    js_all_pages->Set(i, js_page);
+  }
+
+  // Return JS array of pages
+  info.GetReturnValue().Set(js_all_pages);
+}
+
+// - Read a page from an NFC tag.
+// Data returned will be an array of 4 bytes
+NAN_METHOD(readPage){
+  // Grab desired page number
+  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
+  int page_number = Nan::To<int>(info[0]).FromJust(); 
+  
+  // Read page
+  std::vector<uint8_t> read_page = nfc.mful.ReadPage(page_number);
+
+  // Create JS array from page
+  v8::Local<v8::Array> page = Nan::New<v8::Array>();
+  
+  for (int i = 0; i < read_page.size(); i++){
+    page->Set(i, Nan::New(read_page.at(i)));
+  }
+
+  // Return JS array
+  info.GetReturnValue().Set(page);
+}
+
 // - Overwrite an existing NFC page.
 // Byte array given must be < 5.
 NAN_METHOD(writePage){
@@ -28,27 +76,6 @@ NAN_METHOD(writePage){
   info.GetReturnValue().Set(statusCode);
 }
 
-// - Read a page from an NFC tag.
-// Data returned will be an array of 4 bytes
-NAN_METHOD(readPage){
-  // Grab desired page number
-  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
-  int page_number = Nan::To<int>(info[0]).FromJust(); 
-  
-  // Read page
-  std::vector<uint8_t> read_page = nfc.mful.ReadPage(page_number);
-
-  // Create JS array from page
-  v8::Local<v8::Array> page = Nan::New<v8::Array>();
-  
-  for (int i = 0; i < read_page.size(); i++){
-    page->Set(i, Nan::New(read_page.at(i)));
-  }
-
-  // Return JS array
-  info.GetReturnValue().Set(page);
-}
-
 // ** EXPORTED NFC INFO OBJECT ** //
 NAN_METHOD(page) {
   // Create object
@@ -57,6 +84,9 @@ NAN_METHOD(page) {
   // Set Object Properties //
   Nan::Set(obj, Nan::New("read").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readPage)).ToLocalChecked());
+
+    Nan::Set(obj, Nan::New("readAll").ToLocalChecked(),
+  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readPages)).ToLocalChecked());
 
   Nan::Set(obj, Nan::New("write").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(writePage)).ToLocalChecked());
