@@ -10,7 +10,7 @@ MATRIX Lite NFC JS is an npm package that allows users of varying skill levels t
 This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Reading Info (All tags)
 - [ ] Reading Page (MIFARE Ultralight & NTAG)
-- [ ] Writing Page (MIFARE Ultralight & NTAG)
+- [x] Writing Page (MIFARE Ultralight & NTAG)
 - [ ] Reading NDEF (MIFARE Ultralight & NTAG)
 - [ ] Writing NDEF (MIFARE Ultralight & NTAG)
 

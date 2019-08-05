@@ -1,22 +1,21 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-matrix.led.set('');
-
 // - Write To A Page (MIFARE Ultralight & NTAG)
-let page = nfc.page();
-console.log(page);
+// let page = nfc.page();
 
-setInterval(function(){
-    nfc.activate();
-    code = page.write(20, [97,98,99,100]);
-    nfc.deactivate();
+// setInterval(function(){
+//     nfc.activate();
 
-    if (code !== "Incorrect Card Type For Function"){
-        console.log(nfc.status(code));
-    }
+//     let message = "heyo".split("").map((x)=>{return x.charCodeAt(0);});
+//     let code = page.write(21, message);//BE CAREFUL ON WHAT PAGE YOU WRITE TO!!!
 
-}, 50);
+//     nfc.deactivate();
+
+//     if (code === 0){
+//         console.log(nfc.status(code));
+//     }
+// }, 50);
 
 
 // - Read A Page (MIFARE Ultralight & NTAG)

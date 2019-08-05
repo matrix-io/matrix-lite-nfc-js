@@ -11,6 +11,7 @@ NAN_METHOD(writePage){
   // Grab data to write
   if (!info[1]->IsArray()) {Nan::ThrowTypeError("Second argument must be an array of ints"); return;}
   v8::Local<v8::Array> content = v8::Local<v8::Array>::Cast(info[1]);
+  if (content->Length() > 4){Nan::ThrowTypeError("Second argument cannot have an array bigger than 4"); return;}
 
   // Create vector from JS array
   std::vector<uint8_t> new_page;
