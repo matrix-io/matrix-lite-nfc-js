@@ -1,20 +1,23 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-console.log(nfc.info());
-let info = nfc.info();
-let data = {};
+let page = nfc.page();
+console.log(page);
 
-setInterval(function(){
-    nfc.activate();
-    data = info.read();
-    nfc.deactivate(); 
+// - Reading Info (All tags)
+// let info = nfc.info();
+// let data = {};
 
-    if (data.updated) {
-        console.log("********");
-        console.log(data);
-        matrix.led.set("green");
-    } else {
-        matrix.led.set("black");
-    }
-},50);
+// setInterval(function(){
+//     nfc.activate();
+//     data = info.read();
+//     nfc.deactivate(); 
+
+//     if (data.updated) {
+//         console.log("********");
+//         console.log(data);
+//         matrix.led.set("green");
+//     } else {
+//         matrix.led.set("black");
+//     }
+// },50);

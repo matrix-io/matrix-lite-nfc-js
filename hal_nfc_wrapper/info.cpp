@@ -1,7 +1,6 @@
 #include <nan.h>
 #include "nfc.h"
 #include "info.h"
-#include <string>//TODO remvoe
 
 // - Populate nfc.data.info
 NAN_METHOD(read){
@@ -24,13 +23,6 @@ NAN_METHOD(read){
 
   // Return NFC info
   info.GetReturnValue().Set(obj);
-
-  // Unused Example for returning UID array
-  // v8::Local<v8::Array> UID = Nan::New<v8::Array>(nfc_data.info.UID.size());
-  // for (int i = 0; i < nfc_data.info.UID.size(); i++){
-  //   UID->Set(i, Nan::New(nfc_data.info.UID.at(i)));
-  // }
-  // Nan::Set(obj, Nan::New("UID").ToLocalChecked(), UID);
 }
 
 // ** EXPORTED NFC INFO OBJECT ** //
