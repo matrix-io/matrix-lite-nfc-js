@@ -85,7 +85,7 @@ NAN_METHOD(page) {
   Nan::Set(obj, Nan::New("read").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readPage)).ToLocalChecked());
 
-    Nan::Set(obj, Nan::New("readAll").ToLocalChecked(),
+  Nan::Set(obj, Nan::New("readAll").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readPages)).ToLocalChecked());
 
   Nan::Set(obj, Nan::New("write").ToLocalChecked(),
