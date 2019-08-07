@@ -1,21 +1,45 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
+// var info = nfc.info();
+
+// console.log(info)
+
+// setInterval(()=>{
+//     info.readAsync((err, data)=>{
+//         if (data.updated)
+//             console.log(data);
+//         else
+//             console.log("Waiting for tag");
+//     });
+// }, 50);
+
+// // everloop TODO REMOVE
+// everloop = new Array(matrix.led.length).fill({});
+// everloop[0] = {b:1};
+
+// setInterval(function(){
+//   var lastColor = everloop.shift();
+//   everloop.push(lastColor);
+//   matrix.led.set(everloop);
+// },0);
+
+
 //////////////////////////////////////////////////////////////////
 // - Read NDEF Pages (MIFARE Ultralight & NTAG)
-ndef = nfc.ndef();
-console.log(ndef);
+// ndef = nfc.ndef();
+// console.log(ndef);
 
-setInterval(function(){
-    nfc.activate();
-    let data = ndef.read();
-    nfc.deactivate(); 
+// setInterval(function(){
+//     nfc.activate();
+//     let data = ndef.read();
+//     nfc.deactivate(); 
 
-    console.log(data);
+//     console.log(data);
 
-    if (data.updated)
-        console.log(data.content.toString());
-},1000);
+//     if (data.updated)
+//         console.log(data.content.toString());
+// },0);
 
 //////////////////////////////////////////////////////////////////
 // - Read Pages (MIFARE Ultralight & NTAG)
@@ -72,20 +96,29 @@ setInterval(function(){
 
 //////////////////////////////////////////////////////////////////
 // - Reading Info (All tags)
-// let info = nfc.info();
-// let data = {};
+let info = nfc.info();
+let data = {};
 
-// setInterval(function(){
-//     nfc.activate();
-//     data = info.read();
-//     nfc.deactivate(); 
+setInterval(function(){
+    nfc.activate();
+    data = info.read();
+    nfc.deactivate(); 
 
-//     if (data.updated) {
-//         console.log("********");
-//         console.log(data);
-//         matrix.led.set("green");
-//     } else {
-//         matrix.led.set("black");
-//     }
-// },50);
+    if (data.updated) {
+        console.log("********");
+        console.log(data);
+        matrix.led.set("green");
+    } else {
+        matrix.led.set("black");
+    }
+},50);
+
+everloop = new Array(matrix.led.length).fill({});
+everloop[0] = {b:1};
+
+setInterval(function(){
+  var lastColor = everloop.shift();
+  everloop.push(lastColor);
+  matrix.led.set(everloop);
+},0);
 //////////////////////////////////////////////////////////////////
