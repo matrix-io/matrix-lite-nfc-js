@@ -2,20 +2,36 @@ var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
 //////////////////////////////////////////////////////////////////
-// - Read Pages (MIFARE Ultralight & NTAG)
-let page = nfc.page();
+// - Read NDEF Pages (MIFARE Ultralight & NTAG)
+ndef = nfc.ndef();
+console.log(ndef);
 
 setInterval(function(){
     nfc.activate();
-    let data = page.readAll();
+    let data = ndef.read();
     nfc.deactivate(); 
 
     console.log(data);
-    if (data.length > 0){
-        console.log("This tag had " + data.length + " pages");
-        process.exit(0);
-    }
+
+    if (data.updated)
+        console.log(data.content.toString());
 },1000);
+
+//////////////////////////////////////////////////////////////////
+// - Read Pages (MIFARE Ultralight & NTAG)
+// let page = nfc.page();
+
+// setInterval(function(){
+//     nfc.activate();
+//     let data = page.readAll();
+//     nfc.deactivate(); 
+
+//     console.log(data);
+//     if (data.length > 0){
+//         console.log("This tag had " + data.length + " pages");
+//         process.exit(0);
+//     }
+// },1000);
 //////////////////////////////////////////////////////////////////
 
 

@@ -76,7 +76,7 @@ NAN_METHOD(writePage){
   info.GetReturnValue().Set(statusCode);
 }
 
-// ** EXPORTED NFC INFO OBJECT ** //
+// ** EXPORTED NFC PAGE OBJECT ** //
 NAN_METHOD(page) {
   // Create object
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
