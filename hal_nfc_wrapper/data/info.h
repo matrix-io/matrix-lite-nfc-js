@@ -3,6 +3,6 @@
 
 #include <nan.h>
 
-NAN_METHOD(info);
+v8::Local<v8::Object> data_info_js();
 
 #endif

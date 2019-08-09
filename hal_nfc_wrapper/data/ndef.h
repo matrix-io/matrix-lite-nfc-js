@@ -3,6 +3,6 @@
 
 #include <nan.h>
 
-NAN_METHOD(ndef);
+// NAN_METHOD(ndef);
 
 #endif

@@ -1,28 +1,14 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-// var info = nfc.info();
+// console.log(nfc.activate());
 
-// console.log(info)
-
-// setInterval(()=>{
-//     info.readAsync((err, data)=>{
-//         if (data.updated)
-//             console.log(data);
-//         else
-//             console.log("Waiting for tag");
-//     });
-// }, 50);
-
-// // everloop TODO REMOVE
-// everloop = new Array(matrix.led.length).fill({});
-// everloop[0] = {b:1};
-
-// setInterval(function(){
-//   var lastColor = everloop.shift();
-//   everloop.push(lastColor);
-//   matrix.led.set(everloop);
-// },0);
+setInterval(()=>{
+    nfc.read((code, data)=>{
+        console.log("code:" + code);
+        console.log(data);
+    });
+},1000);
 
 
 //////////////////////////////////////////////////////////////////
@@ -96,29 +82,20 @@ var matrix = require('@matrix-io/matrix-lite');
 
 //////////////////////////////////////////////////////////////////
 // - Reading Info (All tags)
-let info = nfc.info();
-let data = {};
+// let info = nfc.info();
+// let data = {};
 
-setInterval(function(){
-    nfc.activate();
-    data = info.read();
-    nfc.deactivate(); 
+// setInterval(function(){
+//     nfc.activate();
+//     data = info.read();
+//     nfc.deactivate(); 
 
-    if (data.updated) {
-        console.log("********");
-        console.log(data);
-        matrix.led.set("green");
-    } else {
-        matrix.led.set("black");
-    }
-},50);
-
-everloop = new Array(matrix.led.length).fill({});
-everloop[0] = {b:1};
-
-setInterval(function(){
-  var lastColor = everloop.shift();
-  everloop.push(lastColor);
-  matrix.led.set(everloop);
-},0);
+//     if (data.updated) {
+//         console.log("********");
+//         console.log(data);
+//         matrix.led.set("green");
+//     } else {
+//         matrix.led.set("black");
+//     }
+// },50);
 //////////////////////////////////////////////////////////////////

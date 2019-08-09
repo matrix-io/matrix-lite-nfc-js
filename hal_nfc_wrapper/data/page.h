@@ -3,6 +3,6 @@
 
 #include <nan.h>
 
-NAN_METHOD(page);
+v8::Local<v8::Object> data_pages_js();
 
 #endif

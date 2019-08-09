@@ -1,5 +1,5 @@
 #include <nan.h>
-#include "nfc.h"
+#include "../nfc.h"
 #include "ndef.h"
 
 NAN_METHOD(NDEF_To_String) {
