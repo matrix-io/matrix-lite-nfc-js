@@ -5,16 +5,11 @@
 #include "data/ndef.h"
 #include "data/page.h"
 
-
 namespace hal = matrix_hal;
 
 matrix_hal::NFC nfc;
 matrix_hal::NFCData nfc_data;
 bool nfc_active = false;
-
-// Basis for NFC usage: Activate() -> Some_NFC_Function -> Deactivate()
-NAN_METHOD(activate)   {info.GetReturnValue().Set(nfc.Activate());}
-NAN_METHOD(deactivate) {nfc.Deactivate();}
 
 // Returns a string for the given status code.
 // given by: activate, read, & write functions
@@ -28,10 +23,7 @@ NAN_METHOD(status) {
 // Node addon entry point
 NAN_MODULE_INIT(Initialize){
   // Exported JS functions
-  NAN_EXPORT(target, activate);
-  NAN_EXPORT(target, deactivate);
   NAN_EXPORT(target, status);
-
   NAN_EXPORT(target, read);
 }
 

@@ -2,9 +2,8 @@
 #include "../nfc.h"
 #include "info.h"
 
-// - Convert nfc.data.info to JS variables
-v8::Local<v8::Object> data_info_js() {
-  // Create & return JS object
+// - Convert nfc.data.info to a JS object
+v8::Local<v8::Object> info_data_JS() {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
   Nan::Set(obj, Nan::New("technology").ToLocalChecked(), Nan::New(nfc_data.info.technology).ToLocalChecked());

@@ -4,7 +4,7 @@
 #include <iostream>
 
 // - Convert nfc.pages.info to JS variables
-v8::Local<v8::Object> data_pages_js() {
+v8::Local<v8::Object> pages_data_js() {
   // Create & return JS object
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
@@ -30,26 +30,16 @@ v8::Local<v8::Object> data_pages_js() {
   return obj;
 }
 
-// // - Read a page from an NFC tag.
-// // Data returned will be an array of 4 bytes
-// NAN_METHOD(readPage){
-//   // Grab desired page number
-//   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
-//   int page_number = Nan::To<int>(info[0]).FromJust(); 
+// - Convert an NFC page into a JS array of ints. This is meant to represent a byte.
+v8::Local<v8::Array> page_data_js(std::vector<uint8_t> page) {  
+  v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
   
-//   // Read page
-//   std::vector<uint8_t> read_page = nfc.mful.ReadPage(page_number);
+  for (int i = 0; i < page.size(); i++){
+    page_js->Set(i, Nan::New(page.at(i)));
+  }
 
-//   // Create JS array from page
-//   v8::Local<v8::Array> page = Nan::New<v8::Array>();
-  
-//   for (int i = 0; i < read_page.size(); i++){
-//     page->Set(i, Nan::New(read_page.at(i)));
-//   }
-
-//   // Return JS array
-//   info.GetReturnValue().Set(page);
-// }
+  return page_js;
+}
 
 // // - Overwrite an existing NFC page.
 // // Byte array given must be < 5.

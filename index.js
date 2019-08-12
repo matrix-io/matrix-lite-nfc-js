@@ -8,6 +8,7 @@ setInterval(()=>{
         if(code === 256){
             console.log(code)
             matrix.led.set({g:1});
+            console.log(tag)
         }
         // Didn't read tag
         else if (code === 1024){
@@ -16,8 +17,7 @@ setInterval(()=>{
         }
     });
 
-},500);
-
+}, 0);
 
 //////////////////////////////////////////////////////////////////
 // - Read NDEF Pages (MIFARE Ultralight & NTAG)

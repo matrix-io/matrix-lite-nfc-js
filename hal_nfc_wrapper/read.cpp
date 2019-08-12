@@ -7,30 +7,46 @@
 
 #include <iostream>
 
-class MyAsyncWorker : public Nan::AsyncWorker {
+class AsyncReader : public Nan::AsyncWorker {
 public:
-
   int nfc_status, info_status, pages_status, page_status, ndef_status;
+  readOptions options;
+  std::vector<uint8_t> nfc_page;
 
-  MyAsyncWorker(Nan::Callback *callback, readOptions options )
-    : Nan::AsyncWorker(callback) {}
+  AsyncReader(Nan::Callback *callback, readOptions options )
+    : Nan::AsyncWorker(callback) {
+      this->options = options;
+    }
 
-  // Execute non-blocking code
+  // Execute non-blocking code. **DO NOT MAKE V8 CALLS HERE!**
   void Execute() {
     // Prevent async calls overlapping NFC
     if (!nfc_active){
       nfc_active = true;
 
-      // Read Info
-      nfc_status = nfc.Activate();
-      info_status = nfc.ReadInfo(&nfc_data.info);
-      nfc.Deactivate();
-
-      // Read Pages
-      nfc_status = nfc.Activate();
-      pages_status = nfc.mful.ReadPages(&nfc_data.pages);
-      nfc.Deactivate();
+      // Get requested NFC data //
+      if (options.info) {
+        nfc_status = nfc.Activate();
+        info_status = nfc.ReadInfo(&nfc_data.info);
+        nfc.Deactivate();
+      }
+      if (options.pages) {
+        nfc_status = nfc.Activate();
+        pages_status = nfc.mful.ReadPages(&nfc_data.pages);
+        nfc.Deactivate();
+      }
+      if (options.page != -1){
+        nfc_status = nfc.Activate();
+        nfc_page = nfc.mful.ReadPage(options.page);// Instead of a status, ReadPage() will return an empty array if it fails & a populated one if is passes.
+        nfc.Deactivate();
+      }
+      if (options.ndef){
+        nfc_status = nfc.Activate();
+        // TODO
+        nfc.Deactivate();
+      }
     }
+
     // Run HandleErrorCallback()
     else {
       this->SetErrorMessage("Error: NFC Was Busy Reading/Writing!");
@@ -45,18 +61,27 @@ public:
     // Return scanned NFC data
     v8::Local<v8::Object> tag_data = Nan::New<v8::Object>();
 
-    // TODO: add conditionals on what to read
-    // Create NFC data & add read status code to each object //
+    // Create NFC data & add read status to each data object //
     // * Info
-    v8::Local<v8::Object> info_data = data_info_js();
-    Nan::Set(info_data, Nan::New("status").ToLocalChecked(), Nan::New(info_status));
-    Nan::Set(tag_data, Nan::New("info").ToLocalChecked(), info_data);
+    if (options.info) {
+      v8::Local<v8::Object> info_data = info_data_js();
+      Nan::Set(info_data, Nan::New("status").ToLocalChecked(), Nan::New(info_status));
+      Nan::Set(tag_data, Nan::New("info").ToLocalChecked(), info_data);
+    }
     // * Pages
-    v8::Local<v8::Object> pages_data = data_pages_js();
-    Nan::Set(pages_data, Nan::New("status").ToLocalChecked(), Nan::New(pages_status));
-    Nan::Set(tag_data, Nan::New("pages").ToLocalChecked(), pages_data);
+    if (options.pages) {
+      v8::Local<v8::Object> pages_data = pages_data_js();
+      Nan::Set(pages_data, Nan::New("status").ToLocalChecked(), Nan::New(pages_status));
+      Nan::Set(tag_data, Nan::New("pages").ToLocalChecked(), pages_data);
+    }
     // * Page
+    if (options.page != -1){
+      // Nan::Set(tag_data, Nan::New("page").ToLocalChecked(), page_data_js(nfc_page));
+    }
     // * NDEF
+    if (options.ndef){
+        // TODO
+    }
 
     // Callback Parameters
     int argCount = 2;
@@ -87,5 +112,5 @@ NAN_METHOD(read){
     Nan::To<v8::Function>(info[0]).ToLocalChecked()
   );
 
-  Nan::AsyncQueueWorker(new MyAsyncWorker(callback, readOptions{true,true,0,true}));
+  Nan::AsyncQueueWorker(new AsyncReader(callback, readOptions{false,false,0,true}));
 }
