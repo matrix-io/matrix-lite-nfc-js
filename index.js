@@ -1,20 +1,22 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-console.log(123);
-
 setInterval(()=>{
-    nfc.read((tag)=>{
-        if(tag.info.status === 0){
+    
+    nfc.read((code, tag)=>{
+        // Read tag
+        if(code === 256){
+            console.log(code)
             matrix.led.set({g:1});
         }
-        else{
+        // Didn't read tag
+        else if (code === 1024){
+            console.log(code);
             matrix.led.set();
         }
-
-        console.log(tag);
     });
-},1000);
+
+},500);
 
 
 //////////////////////////////////////////////////////////////////
