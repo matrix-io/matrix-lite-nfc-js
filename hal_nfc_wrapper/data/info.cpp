@@ -3,7 +3,7 @@
 #include "info.h"
 
 // - Convert nfc.data.info to a JS object
-v8::Local<v8::Object> info_data_JS() {
+v8::Local<v8::Object> info_data_js() {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
   Nan::Set(obj, Nan::New("technology").ToLocalChecked(), Nan::New(nfc_data.info.technology).ToLocalChecked());
@@ -18,4 +18,8 @@ v8::Local<v8::Object> info_data_JS() {
   Nan::Set(obj, Nan::New("updated").ToLocalChecked(), Nan::New(nfc_data.info.recently_updated));
 
   return obj;
+}
+
+int infoTest() {
+  return 4949;
 }

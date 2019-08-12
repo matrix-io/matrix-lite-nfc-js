@@ -37,7 +37,7 @@ public:
       }
       if (options.page != -1){
         nfc_status = nfc.Activate();
-        nfc_page = nfc.mful.ReadPage(options.page);// Instead of a status, ReadPage() will return an empty array if it fails & a populated one if is passes.
+        nfc_page = nfc.mful.ReadPage(options.page);
         nfc.Deactivate();
       }
       if (options.ndef){
@@ -76,7 +76,8 @@ public:
     }
     // * Page
     if (options.page != -1){
-      // Nan::Set(tag_data, Nan::New("page").ToLocalChecked(), page_data_js(nfc_page));
+      // Instead of a status, page will return an empty array if it fails & a populated one if is passes.
+      Nan::Set(tag_data, Nan::New("page").ToLocalChecked(), page_data_js(nfc_page));
     }
     // * NDEF
     if (options.ndef){
@@ -112,5 +113,5 @@ NAN_METHOD(read){
     Nan::To<v8::Function>(info[0]).ToLocalChecked()
   );
 
-  Nan::AsyncQueueWorker(new AsyncReader(callback, readOptions{false,false,0,true}));
+  Nan::AsyncQueueWorker(new AsyncReader(callback, readOptions{true,true,0,true}));
 }

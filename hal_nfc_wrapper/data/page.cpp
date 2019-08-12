@@ -3,11 +3,20 @@
 #include "page.h"
 #include <iostream>
 
-// - Convert nfc.pages.info to JS variables
-v8::Local<v8::Object> pages_data_js() {
-  // Create & return JS object
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
+// - Convert an NFC page into a JS array of ints. This is meant to represent a byte.
+v8::Local<v8::Array> page_data_js(std::vector<uint8_t> page) {  
+  v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
+  
+  for (int i = 0; i < page.size(); i++){
+    page_js->Set(i, Nan::New(page.at(i)));
+  }
 
+  return page_js;
+}
+
+// - Convert nfc.pages.info to a JS object
+v8::Local<v8::Object> pages_data_js() {
+  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
   Nan::Set(obj, Nan::New("read_complete").ToLocalChecked(), Nan::New(nfc_data.pages.read_complete));
   Nan::Set(obj, Nan::New("updated").ToLocalChecked(), Nan::New(nfc_data.pages.recently_updated));
 
@@ -28,17 +37,6 @@ v8::Local<v8::Object> pages_data_js() {
   Nan::Set(obj, Nan::New("content").ToLocalChecked(), pages_js);
 
   return obj;
-}
-
-// - Convert an NFC page into a JS array of ints. This is meant to represent a byte.
-v8::Local<v8::Array> page_data_js(std::vector<uint8_t> page) {  
-  v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
-  
-  for (int i = 0; i < page.size(); i++){
-    page_js->Set(i, Nan::New(page.at(i)));
-  }
-
-  return page_js;
 }
 
 // // - Overwrite an existing NFC page.
