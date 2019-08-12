@@ -10,7 +10,7 @@
 class MyAsyncWorker : public Nan::AsyncWorker {
 public:
 
-  int statusCode;
+  int info_status, pages_status;
 
   MyAsyncWorker(Nan::Callback *callback, readOptions options )
     : Nan::AsyncWorker(callback) {}
@@ -18,31 +18,36 @@ public:
   // Execute non-blocking code
   void Execute() {
     // Read NFC tag
-    statusCode = nfc.Activate();
+    nfc.Activate();
+    info_status = nfc.ReadInfo(&nfc_data.info);
+    nfc.Deactivate();
 
-    nfc.ReadInfo(&nfc_data.info);
-    nfc.mful.ReadPages(&nfc_data.pages);
-
+    nfc.Activate();
+    pages_status = nfc.mful.ReadPages(&nfc_data.pages);
     nfc.Deactivate();
   }
 
   void HandleOKCallback() {
-    // prevent V8 objects from being garbage collected
+    // Prevent V8 objects from being garbage collected
     Nan::HandleScope scope;
 
     // Return scanned NFC data
-    v8::Local<v8::Object> nfcData = Nan::New<v8::Object>();
-    Nan::Set(nfcData, Nan::New("info").ToLocalChecked(), data_info_js());
-    Nan::Set(nfcData, Nan::New("pages").ToLocalChecked(), data_pages_js());
-    // TODO: page
-    // TODO: ndef
+    v8::Local<v8::Object> tag_data = Nan::New<v8::Object>();
+
+    // Create NFC data & add read status code to each object
+    v8::Local<v8::Object> info_data = data_info_js();
+    Nan::Set(info_data, Nan::New("status").ToLocalChecked(), Nan::New(info_status));
+    Nan::Set(tag_data, Nan::New("info").ToLocalChecked(), info_data);
+
+    v8::Local<v8::Object> pages_data = data_pages_js();
+    Nan::Set(pages_data, Nan::New("status").ToLocalChecked(), Nan::New(pages_status));
+    Nan::Set(tag_data, Nan::New("pages").ToLocalChecked(), pages_data);
 
     // Callback Parameters
-    int argCount = 2;
+    int argCount = 1;
 
     v8::Local<v8::Value> argv[] = {
-      Nan::New(statusCode),
-      nfcData
+      tag_data
     };
 
     // Start callback
@@ -61,11 +66,3 @@ NAN_METHOD(read){
 
   Nan::AsyncQueueWorker(new MyAsyncWorker(callback, readOptions{true,true,0,true}));
 }
-
-
-///////////////////////////
-// BLUEPRINT
-//////////////////////////
-/*
-read({info: bool, pages: bool, page: int, ndef: bool}, callback());
-*/

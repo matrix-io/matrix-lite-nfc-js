@@ -4,28 +4,30 @@
 #include <iostream>
 
 // - Convert nfc.pages.info to JS variables
-// TODO: return an object instead of array
-v8::Local<v8::Object> data_page_js() {
-  std::vector<std::vector<uint8_t>> pages = nfc_data.pages.content;
+v8::Local<v8::Object> data_pages_js() {
+  // Create & return JS object
+  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
-  // JS array for all pages
+  Nan::Set(obj, Nan::New("read_complete").ToLocalChecked(), Nan::New(nfc_data.pages.read_complete));
+  Nan::Set(obj, Nan::New("updated").ToLocalChecked(), Nan::New(nfc_data.pages.recently_updated));
+
+  // Create JS array for pages
   v8::Local<v8::Array> pages_js = Nan::New<v8::Array>();
 
-  // Create a JS array for each page
-  for (int i = 0; i < pages.size(); i++){
+  // Populate pages with page[ints]
+  for (int i = 0; i < nfc_data.pages.content.size(); i++){
     v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
 
-    // Populate each JS array
-    for (int j = 0; j < pages[i].size(); j++){
-      page_js->Set(j, Nan::New(pages[i][j]));
+    for (int j = 0; j < nfc_data.pages.content[i].size(); j++){
+      page_js->Set(j, Nan::New(nfc_data.pages.content[i][j]));
     }
 
-    // Save the JS array
     pages_js->Set(i, page_js);
   }
 
-  // Return JS array of pages
-  return pages_js;
+  Nan::Set(obj, Nan::New("content").ToLocalChecked(), pages_js);
+
+  return obj;
 }
 
 // // - Read a page from an NFC tag.
