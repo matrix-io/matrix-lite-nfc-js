@@ -111,35 +111,32 @@ public:
 NAN_METHOD(read){
   //TODO: parse user args
 
-  // Default args
+  // All nfc reads default to false
   readOptions options = {false,false,-1,false};
 
-  // Parse user args
+  // Ensure callback is passed
   if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
-  if (info[1]->IsObject()) {
-    // v8::Local<v8::Object> read_options = info[1]->ToObject();
-    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
 
+  // Ensure object is passed
+  if (info[1]->IsObject()) {
+    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
     v8::Local<v8::String> info_prop  = Nan::New("info").ToLocalChecked();
     v8::Local<v8::String> pages_prop = Nan::New("pages").ToLocalChecked();
     v8::Local<v8::String> page_prop  = Nan::New("page").ToLocalChecked();
     v8::Local<v8::String> ndef_prop  = Nan::New("ndef").ToLocalChecked();
 
-    // Set read options
-    if (Nan::HasOwnProperty(read_options, info_prop).FromJust()) {
+    // If given, update read options
+    if (Nan::HasOwnProperty(read_options, info_prop).FromJust() && Nan::True() == Nan::Get(read_options, info_prop).ToLocalChecked())
+      options.info = true;
 
-    // v8::Local<v8::Value> info_check = Nan::Get(read_options, info_prop);
-
-    v8::Local<v8::Value> test1 = Nan::Get(read_options, info_prop).ToLocalChecked();
-    bool test2 = test1;
-    // bool test = Nan::To<bool>(Nan::Get(read_options, info_prop).ToLocalChecked()).FromJust();
-
-      
-    //   // bool test = info_check->BooleanValue();
-
-    //   // bool test = Nan::New(Nan::To<bool>(info_check).FromJust());
-    //   std::cout << test << std::endl;
-    }
+    if (Nan::HasOwnProperty(read_options, pages_prop).FromJust() && Nan::True() == Nan::Get(read_options, pages_prop).ToLocalChecked())
+      options.pages = true;
+    
+    if (Nan::HasOwnProperty(read_options, page_prop).FromJust())
+      options.page = Nan::To<int>(Nan::Get(read_options, page_prop).ToLocalChecked()).FromJust();
+    
+    if (Nan::HasOwnProperty(read_options, ndef_prop).FromJust() && Nan::True() == Nan::Get(read_options, ndef_prop).ToLocalChecked())
+      options.ndef = true;
   }
 
   Nan::Callback *callback = new Nan::Callback(
