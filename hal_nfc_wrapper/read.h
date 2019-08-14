@@ -13,5 +13,4 @@ struct readOptions {
   bool ndef;
 };
 
-
 #endif

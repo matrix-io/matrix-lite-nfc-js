@@ -108,24 +108,22 @@ public:
   }
 };
 
+// - NFC read function for info, page, pages, & NDEF.
+// Calls an async worker for NFC reading after handling user arguments.
 NAN_METHOD(read){
-  //TODO: parse user args
-
-  // All nfc reads default to false
+  // Set all NFC read options to fault
   readOptions options = {false,false,-1,false};
-
-  // Ensure callback is passed
-  if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
 
   // Ensure object is passed
   if (info[1]->IsObject()) {
+    // Grab object
     v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
     v8::Local<v8::String> info_prop  = Nan::New("info").ToLocalChecked();
     v8::Local<v8::String> pages_prop = Nan::New("pages").ToLocalChecked();
     v8::Local<v8::String> page_prop  = Nan::New("page").ToLocalChecked();
     v8::Local<v8::String> ndef_prop  = Nan::New("ndef").ToLocalChecked();
 
-    // If given, update read options
+    // If given, update NFC read options
     if (Nan::HasOwnProperty(read_options, info_prop).FromJust() && Nan::True() == Nan::Get(read_options, info_prop).ToLocalChecked())
       options.info = true;
 
@@ -134,14 +132,17 @@ NAN_METHOD(read){
     
     if (Nan::HasOwnProperty(read_options, page_prop).FromJust())
       options.page = Nan::To<int>(Nan::Get(read_options, page_prop).ToLocalChecked()).FromJust();
-    
+
     if (Nan::HasOwnProperty(read_options, ndef_prop).FromJust() && Nan::True() == Nan::Get(read_options, ndef_prop).ToLocalChecked())
       options.ndef = true;
   }
 
-  Nan::Callback *callback = new Nan::Callback(
-    Nan::To<v8::Function>(info[0]).ToLocalChecked()
-  );
+  // Ensure callback is passed
+  if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
 
+  // Grab callback
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+
+  // Run async function
   Nan::AsyncQueueWorker(new AsyncReader(callback, options));
 }
