@@ -19,7 +19,3 @@ v8::Local<v8::Object> info_data_js() {
 
   return obj;
 }
-
-int infoTest() {
-  return 4949;
-}

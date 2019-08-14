@@ -4,18 +4,17 @@ var matrix = require('@matrix-io/matrix-lite');
 setInterval(()=>{
     
     nfc.read((code, tag)=>{
-        // Read tag
-        if(code === 256){
-            console.log(code)
-            matrix.led.set({g:1});
-            console.log(tag)
-        }
-        // Didn't read tag
-        else if (code === 1024){
-            console.log(code);
-            matrix.led.set();
-        }
-    });
+        // // Read tag
+        // if(code === 256){
+        //     console.log(code)
+        //     matrix.led.set({g:1});
+        // }
+        // // Didn't read tag
+        // else if (code === 1024){
+        //     console.log(code);
+        //     matrix.led.set();
+        // }
+    }, {"test": 123});
 
 }, 0);
 

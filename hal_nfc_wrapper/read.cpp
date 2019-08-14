@@ -42,7 +42,7 @@ public:
       }
       if (options.ndef){
         nfc_status = nfc.Activate();
-        // TODO
+        ndef_status = nfc.ndef.Read(&nfc_data.ndef);
         nfc.Deactivate();
       }
     }
@@ -76,12 +76,14 @@ public:
     }
     // * Page
     if (options.page != -1){
-      // Instead of a status, page will return an empty array if it fails & a populated one if is passes.
+      // Instead of a status, page will return an empty array if it fails & a populated one if it passes.
       Nan::Set(tag_data, Nan::New("page").ToLocalChecked(), page_data_js(nfc_page));
     }
     // * NDEF
     if (options.ndef){
-        // TODO
+      v8::Local<v8::Object> ndef_data = ndef_data_js();
+      Nan::Set(ndef_data, Nan::New("status").ToLocalChecked(), Nan::New(ndef_status));
+      Nan::Set(tag_data, Nan::New("ndef").ToLocalChecked(), ndef_data);
     }
 
     // Callback Parameters
@@ -109,9 +111,40 @@ public:
 NAN_METHOD(read){
   //TODO: parse user args
 
+  // Default args
+  readOptions options = {false,false,-1,false};
+
+  // Parse user args
+  if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
+  if (info[1]->IsObject()) {
+    // v8::Local<v8::Object> read_options = info[1]->ToObject();
+    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
+
+    v8::Local<v8::String> info_prop  = Nan::New("info").ToLocalChecked();
+    v8::Local<v8::String> pages_prop = Nan::New("pages").ToLocalChecked();
+    v8::Local<v8::String> page_prop  = Nan::New("page").ToLocalChecked();
+    v8::Local<v8::String> ndef_prop  = Nan::New("ndef").ToLocalChecked();
+
+    // Set read options
+    if (Nan::HasOwnProperty(read_options, info_prop).FromJust()) {
+
+    // v8::Local<v8::Value> info_check = Nan::Get(read_options, info_prop);
+
+    v8::Local<v8::Value> test1 = Nan::Get(read_options, info_prop).ToLocalChecked();
+    bool test2 = test1;
+    // bool test = Nan::To<bool>(Nan::Get(read_options, info_prop).ToLocalChecked()).FromJust();
+
+      
+    //   // bool test = info_check->BooleanValue();
+
+    //   // bool test = Nan::New(Nan::To<bool>(info_check).FromJust());
+    //   std::cout << test << std::endl;
+    }
+  }
+
   Nan::Callback *callback = new Nan::Callback(
     Nan::To<v8::Function>(info[0]).ToLocalChecked()
   );
 
-  Nan::AsyncQueueWorker(new AsyncReader(callback, readOptions{true,true,0,true}));
+  Nan::AsyncQueueWorker(new AsyncReader(callback, options));
 }
