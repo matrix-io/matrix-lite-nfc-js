@@ -18,38 +18,37 @@ public:
 
   // Execute non-blocking code. **DO NOT MAKE V8 CALLS HERE!**
   void Execute() {
-    // Prevent async calls overlapping NFC
-    if (!nfc_active){
-      nfc_active = true;
-
-      // Get requested NFC data //
-      if (options.info) {
-        nfc_status = nfc.Activate();
-        info_status = nfc.ReadInfo(&nfc_data.info);
-        nfc.Deactivate();
-      }
-      if (options.pages) {
-        nfc_status = nfc.Activate();
-        pages_status = nfc.mful.ReadPages(&nfc_data.pages);
-        nfc.Deactivate();
-      }
-      if (options.page != -1){
-        nfc_status = nfc.Activate();
-        nfc_page = nfc.mful.ReadPage(options.page);
-        nfc.Deactivate();
-      }
-      if (options.ndef){
-        nfc_status = nfc.Activate();
-        ndef_status = nfc.ndef.Read(&nfc_data.ndef);
-        nfc.Deactivate();
-      }
-    }
-
-    // Run HandleErrorCallback()
-    else {
-      this->SetErrorMessage("Error: NFC Was Busy Reading/Writing!");
+    // Avoid reading, if NFC is being used by another thread
+    if (!nfc_usage.try_lock()){
+      std::cout << "MUTEX STOPPED NFC BUSY" << std::endl;
+      this->SetErrorMessage("NFC was Busy");
       return;
     }
+
+    // Get requested NFC data //
+    if (options.info) {
+      nfc_status = nfc.Activate();
+      info_status = nfc.ReadInfo(&nfc_data.info);
+      nfc.Deactivate();
+    }
+    if (options.pages) {
+      nfc_status = nfc.Activate();
+      pages_status = nfc.mful.ReadPages(&nfc_data.pages);
+      nfc.Deactivate();
+    }
+    if (options.page != -1){
+      nfc_status = nfc.Activate();
+      nfc_page = nfc.mful.ReadPage(options.page);
+      nfc.Deactivate();
+    }
+    if (options.ndef){
+      nfc_status = nfc.Activate();
+      ndef_status = nfc.ndef.Read(&nfc_data.ndef);
+      nfc.Deactivate();
+    }
+
+    // Allow other threads to use NFC
+    nfc_usage.unlock();
   }
 
   void HandleOKCallback() {
@@ -92,23 +91,18 @@ public:
     };
 
     // Start callback
-    nfc_active = false;
     Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), argCount, argv);
   }
 
   // Called if NFC was busy
-  void HandleErrorCallback() {
-    Nan::HandleScope scope;
-    v8::Local<v8::Value> argv[] = {
-      Nan::New(-999)// status code we made up
-    };
-    Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), 1, argv);
-  }
+  void HandleErrorCallback() {/*Left here for debugging*/}
 };
 
 // - NFC read function for info, page, pages, & NDEF.
 // Calls an async worker for NFC reading after handling user arguments.
 NAN_METHOD(read){
+  // nfc_usage.lock(); // TODO remove
+
   // Set all NFC read options to fault
   readOptions options = {false,false,-1,false};
 

@@ -3,22 +3,19 @@ var matrix = require('@matrix-io/matrix-lite');
 
 var ndef = nfc.ndef();
 
-
 setInterval(()=>{
     nfc.read((code, tag)=>{
         // Read tag
         if(code === 256){
-            // console.log(tag);
+            console.log(tag);
             matrix.led.set({g:1});
-
-            ndef.parser();
-            // console.log(tag.ndef.content.toString())
         }
         // Didn't read tag
         else if (code === 1024){
+            console.log("no tag found")
             matrix.led.set();
         }
-    }, {ndef: true});
+    }, {info: true});
 
 }, 0);
 

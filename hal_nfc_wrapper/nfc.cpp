@@ -7,7 +7,7 @@ namespace hal = matrix_hal;
 
 matrix_hal::NFC nfc;
 matrix_hal::NFCData nfc_data;
-bool nfc_active = false;
+std::mutex nfc_usage;
 
 // Returns a string for the given status code.
 // given by: activate, read, & write functions
