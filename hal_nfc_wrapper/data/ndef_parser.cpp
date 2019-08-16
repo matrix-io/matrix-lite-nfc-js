@@ -2,7 +2,7 @@
 #include "../nfc.h"
 #include "ndef_parser.h"
 
-#include <iostream>
+#include <iostream>// TODO remove
 
 NAN_METHOD(ndef_parser_to_string) {
   //TODO
