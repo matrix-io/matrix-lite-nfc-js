@@ -7,8 +7,6 @@
 
 extern matrix_hal::NFC nfc;
 extern matrix_hal::NFCData nfc_data;
-
-// This is to prevent multiple async functions from using nfc.Activate()
 extern std::mutex nfc_usage;
 
 #endif
