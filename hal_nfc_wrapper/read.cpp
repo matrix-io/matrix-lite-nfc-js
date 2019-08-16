@@ -20,9 +20,8 @@ public:
   void Execute() {
     // Avoid reading, if NFC is being used by another thread
     if (!nfc_usage.try_lock()){
-      std::cout << "MUTEX STOPPED NFC BUSY" << std::endl;
-      this->SetErrorMessage("NFC was Busy");
-      return;
+      this->SetErrorMessage("NFC was Busy"); // calls HandleErrorCallback()
+      return; // we avoid queuing since .read() will be in an endless loop
     }
 
     // Get requested NFC data //
