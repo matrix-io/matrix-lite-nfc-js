@@ -1,7 +1,6 @@
 #include <nan.h>
 #include "../nfc.h"
 #include "page.h"
-#include <iostream>
 
 // - Convert an NFC page into a JS array of ints. This is meant to represent a byte.
 v8::Local<v8::Array> page_data_js(std::vector<uint8_t> page) {  

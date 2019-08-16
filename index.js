@@ -3,25 +3,24 @@ var matrix = require('@matrix-io/matrix-lite');
 
 var ndef = nfc.ndef();
 
+
 setInterval(()=>{
+    nfc.read((code, tag)=>{
+        // Read tag
+        if(code === 256){
+            // console.log(tag);
+            matrix.led.set({g:1});
 
-    console.log(ndef.parser());
+            ndef.parser();
+            // console.log(tag.ndef.content.toString())
+        }
+        // Didn't read tag
+        else if (code === 1024){
+            matrix.led.set();
+        }
+    }, {ndef: true});
 
-    // nfc.read((code, tag)=>{
-    //     // Read tag
-    //     if(code === 256){
-    //         // console.log(code)
-    //         console.log(tag);
-    //         matrix.led.set({g:1});
-    //     }
-    //     // Didn't read tag
-    //     else if (code === 1024){
-    //         // console.log(code);
-    //         matrix.led.set();
-    //     }
-    // }, {info: true, pages: true, page: 12, ndef: true});
-
-}, 1000);
+}, 0);
 
 //////////////////////////////////////////////////////////////////
 // - Read NDEF Pages (MIFARE Ultralight & NTAG)
