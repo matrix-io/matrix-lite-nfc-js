@@ -5,4 +5,6 @@
 
 v8::Local<v8::Object> ndef_data_js();
 
+NAN_METHOD(ndef);
+
 #endif

@@ -5,8 +5,6 @@
 #include "data/page.h"
 #include "data/ndef.h"
 
-#include <iostream>
-
 class AsyncReader : public Nan::AsyncWorker {
 public:
   int nfc_status, info_status, pages_status, page_status, ndef_status;
@@ -102,7 +100,7 @@ public:
   void HandleErrorCallback() {
     Nan::HandleScope scope;
     v8::Local<v8::Value> argv[] = {
-      Nan::New(-999)// status code we made up for busy NFC
+      Nan::New(-999)// status code we made up
     };
     Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), 1, argv);
   }

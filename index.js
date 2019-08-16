@@ -1,23 +1,27 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-setInterval(()=>{
-    
-    nfc.read((code, tag)=>{
-        // Read tag
-        if(code === 256){
-            // console.log(code)
-            console.log(tag);
-            matrix.led.set({g:1});
-        }
-        // Didn't read tag
-        else if (code === 1024){
-            // console.log(code);
-            matrix.led.set();
-        }
-    }, {info: true, pages: true, page: 12, ndef: true});
+var ndef = nfc.ndef();
 
-}, 0);
+setInterval(()=>{
+
+    console.log(ndef.parser());
+
+    // nfc.read((code, tag)=>{
+    //     // Read tag
+    //     if(code === 256){
+    //         // console.log(code)
+    //         console.log(tag);
+    //         matrix.led.set({g:1});
+    //     }
+    //     // Didn't read tag
+    //     else if (code === 1024){
+    //         // console.log(code);
+    //         matrix.led.set();
+    //     }
+    // }, {info: true, pages: true, page: 12, ndef: true});
+
+}, 1000);
 
 //////////////////////////////////////////////////////////////////
 // - Read NDEF Pages (MIFARE Ultralight & NTAG)
