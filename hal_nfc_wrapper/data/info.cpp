@@ -1,13 +1,9 @@
 #include <nan.h>
-#include "nfc.h"
+#include "../nfc.h"
 #include "info.h"
 
-// - Populate nfc.data.info
-NAN_METHOD(readInfo){
-  // Read NFC tag
-  nfc.ReadInfo(&nfc_data.info);
-
-  // Create & populate NFC info object
+// - Convert nfc.data.info to a JS object
+v8::Local<v8::Object> info_data_js() {
   v8::Local<v8::Object> obj = Nan::New<v8::Object>();
 
   Nan::Set(obj, Nan::New("technology").ToLocalChecked(), Nan::New(nfc_data.info.technology).ToLocalChecked());
@@ -21,19 +17,5 @@ NAN_METHOD(readInfo){
   Nan::Set(obj, Nan::New("storage_size").ToLocalChecked(), Nan::New(nfc_data.info.storage_size));
   Nan::Set(obj, Nan::New("updated").ToLocalChecked(), Nan::New(nfc_data.info.recently_updated));
 
-  // Return NFC info
-  info.GetReturnValue().Set(obj);
-}
-
-// ** EXPORTED NFC INFO OBJECT ** //
-NAN_METHOD(info) {
-  // Create object
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
-
-  // Set Object Properties //
-  Nan::Set(obj, Nan::New("read").ToLocalChecked(),
-  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(readInfo)).ToLocalChecked());
-
-  // Return object
-  info.GetReturnValue().Set(obj);
+  return obj;
 }
