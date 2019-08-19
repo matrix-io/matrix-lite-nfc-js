@@ -31,7 +31,6 @@ v8::Local<v8::Object> ndef_data_js() {
   return obj;
 }
 
-
 // TODO remove
 // ** EXPORTED NFC NDEF OBJECT ** //
 // NAN_METHOD(ndef) {

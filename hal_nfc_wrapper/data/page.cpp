@@ -41,16 +41,39 @@ v8::Local<v8::Object> pages_data_js() {
 
 // - Overwrite an existing NFC page.
 // Used for AsyncWriter.
-int page_write_async(v8::Local<v8::Value> page_index, v8::Local<v8::Array> page_data){
-  // Grab page index from JS var
-  int index = Nan::To<int>(page_index).FromJust();
+// int page_write_async(v8::Local<v8::Value> page_index, v8::Local<v8::Array> page_data){
+//   // Grab page index from JS var
+//   int index = Nan::To<int>(page_index).FromJust();
   
-  // Create vector from JS array
-  std::vector<uint8_t> new_page;
-  for (int i = 0; i < page_data->Length(); i++){
-    new_page.push_back(Nan::To<int>(Nan::Get(page_data, i).ToLocalChecked()).FromJust());
-  }
+//   // Create vector from JS array
+//   std::vector<uint8_t> new_page;
+//   for (int i = 0; i < page_data->Length(); i++){
+//     new_page.push_back(Nan::To<int>(Nan::Get(page_data, i).ToLocalChecked()).FromJust());
+//   }
 
-  // Write to NFC page & return status code
-  return nfc.mful.WritePage(index, new_page);
-}
+//   // Write to NFC page & return status code
+//   return nfc.mful.WritePage(index, new_page);
+// }
+
+// NAN_METHOD(page_write){
+//   // Grab desired page number
+//   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("First argument must be a number"); return;}
+//   int page_number = Nan::To<int>(info[0]).FromJust(); 
+
+//   // Grab data to write
+//   if (!info[1]->IsArray()) {Nan::ThrowTypeError("Second argument must be an array of ints"); return;}
+//   v8::Local<v8::Array> content = v8::Local<v8::Array>::Cast(info[1]);
+//   if (content->Length() > 4){Nan::ThrowTypeError("Second argument cannot have an array bigger than 4"); return;}
+
+//   // Create vector from JS array
+//   std::vector<uint8_t> new_page;
+//   for (int i = 0; i < content->Length(); i++){
+//     new_page.push_back(Nan::To<int>(Nan::Get(content, i).ToLocalChecked()).FromJust());
+//   }
+
+//   // Overwrite NFC page
+//   int statusCode = nfc.mful.WritePage(page_number, new_page);
+
+//   //return code for JS nfc.status()
+//   info.GetReturnValue().Set(statusCode);
+// }

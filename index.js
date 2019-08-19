@@ -3,7 +3,13 @@ var matrix = require('@matrix-io/matrix-lite');
 
 var write = nfc.write();
 
-write.page(20, [0,0,0,0], ()=>{});
+write.page(15, [0,0,0,0], (start_code, write_code)=>{
+    console.log("Activate:" + start_code);
+    console.log(nfc.status(start_code)+"\n");
+
+    console.log("Write:" + write_code);
+    console.log(nfc.status(write_code));
+});
 
 // write.ndef(()=>{});
 
