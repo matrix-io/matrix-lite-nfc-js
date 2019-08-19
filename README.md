@@ -8,12 +8,12 @@ MATRIX Lite NFC JS is an npm package that allows users of varying skill levels t
 `index.js` will contain example code. Note that the usage for this library will change before release.
 
 This roadmap is for achieving a basic implementation of the checklist below.
-- [x] Reading Info (All tags)
-- [x] Reading Page (MIFARE Ultralight & NTAG)
-- [ ] Writing Page (MIFARE Ultralight & NTAG)
-- [x] Reading NDEF (MIFARE Ultralight & NTAG)
-- [ ] Writing NDEF (MIFARE Ultralight & NTAG)
-- [ ] NDEF Parser  (MIFARE Ultralight & NTAG)
+- [x] Reading Info  (All tags)
+- [x] Reading Pages (MIFARE Ultralight & NTAG)
+- [x] Writing Page  (MIFARE Ultralight & NTAG)
+- [x] Reading NDEF  (MIFARE Ultralight & NTAG)
+- [ ] Writing NDEF  (MIFARE Ultralight & NTAG)
+- [ ] NDEF Parser   (MIFARE Ultralight & NTAG)
 
 # Installation
 Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
