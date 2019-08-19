@@ -1,8 +1,6 @@
 #include "write.h"
 #include <nan.h>
 #include "nfc.h"
-#include "data/page.h"
-#include "data/ndef.h"
 #include<iostream>// TODO remove
 using namespace std;// TODO remove
 
@@ -27,9 +25,11 @@ public:
       page_status = nfc.mful.WritePage(options.page.index, options.page.data);
       nfc.Deactivate();
     }
-    // else if (options.tag == writeType::ndef){
-    //   cout << "DOING NDEF WRITE..." << endl;
-    // }
+    else if (options.tag == writeType::ndef){
+      nfc_status = nfc.Activate();
+      cout << "DOING NDEF WRITE... not finished yet...." << endl;
+      nfc.Deactivate();
+    }
 
     // Allow other threads to use NFC
     nfc_usage.unlock();
