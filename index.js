@@ -1,12 +1,11 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-var ndef = nfc.ndef();
-var page = nfc.page();
+var write = nfc.write();
 
-console.log(ndef);
-console.log(page);
-console.log(nfc);
+write.page(20, [0,0,0,0], ()=>{});
+
+// write.ndef(()=>{});
 
 // setInterval(()=>{
 //     nfc.read((code, tag)=>{

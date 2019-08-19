@@ -3,18 +3,20 @@
 
 #include <nan.h>
 
-// TODO: fix compiling issue with the code below
+enum writeType { page, ndef };
 
-class AsyncWriter : public Nan::AsyncWorker {
-public:
-  std::vector<uint8_t> nfc_page;
+// Determines which tag write & parameters for that write.
+// Options given are determined by writeType tag.
+struct writeOptions {
+  writeType tag;
 
-  AsyncWriter(Nan::Callback *callback):Nan::AsyncWorker(callback);// TODO: maybe remove
-
-  // Execute non-blocking code. **DO NOT MAKE V8 CALLS HERE!**
-  void Execute();
-
-  void HandleOKCallback();
+  // page
+  v8::Local<v8::Value> page_index;
+  v8::Local<v8::Array> page_data;
+  
+  // ndef
 };
+
+NAN_METHOD(write);
 
 #endif

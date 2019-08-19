@@ -1,8 +1,7 @@
 #include <nan.h>
 #include "nfc.h"
 #include "read.h"
-#include "data/ndef.h"
-#include "data/page.h"
+#include "write.h"
 
 namespace hal = matrix_hal;
 
@@ -24,8 +23,7 @@ NAN_MODULE_INIT(Initialize){
   // Exported JS functions
   NAN_EXPORT(target, status);
   NAN_EXPORT(target, read);
-  NAN_EXPORT(target, ndef);
-  NAN_EXPORT(target, page);
+  NAN_EXPORT(target, write);
 }
 
 // Create a Node module called "addon"
