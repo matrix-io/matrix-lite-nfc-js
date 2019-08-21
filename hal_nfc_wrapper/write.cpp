@@ -6,7 +6,7 @@ using namespace std;// TODO remove
 
 class AsyncWriter : public Nan::AsyncWorker {
 public:
-  int nfc_status, page_status, ndef_status;
+  int nfc_status, page_status, ndef_status, erase_status;
   writeOptions options;
 
   AsyncWriter(Nan::Callback *callback, writeOptions options)
@@ -30,6 +30,11 @@ public:
       cout << "DOING NDEF WRITE... not finished yet...." << endl;
       nfc.Deactivate();
     }
+    else if (options.tag == writeType::erase){
+      nfc_status = nfc.Activate();
+      erase_status = nfc.ndef.Erase();
+      nfc.Deactivate();
+    }
 
     // Allow other threads to use NFC
     nfc_usage.unlock();
@@ -39,7 +44,7 @@ public:
     // Prevent V8 objects from being garbage collected
     Nan::HandleScope scope;
 
-    // Get status from write function used //
+    // Get status from the used write function //
     int write_status;
     
     switch(options.tag){
@@ -48,6 +53,9 @@ public:
         break;
       case writeType::ndef:
         write_status = ndef_status;
+        break;
+      case writeType::erase:
+        write_status = erase_status;
         break;
     }
 
@@ -63,6 +71,7 @@ public:
   }
 };
 
+// Writes a buffer (array of ints) to an NFC page
 NAN_METHOD(page_write){
   writeOptions options = {.tag = writeType::page};
 
@@ -90,6 +99,19 @@ NAN_METHOD(page_write){
   Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
 }
 
+// Erases all NDEF data on an NFC tag
+NAN_METHOD(erase_write){
+  writeOptions options = {.tag = writeType::erase};
+
+  // Grab callback
+  if (!info[0]->IsFunction()) {Nan::ThrowTypeError("Argument 3 must be a function");return;}
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+
+  // Run async function
+  Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+}
+
+// Writes NDEF data, from NDEF parser, to an NFC tag
 NAN_METHOD(ndef_write){
   // writeOptions options {
   //   .tag = writeType::ndef,
@@ -111,6 +133,9 @@ NAN_METHOD(write){
 
   // Nan::Set(obj, Nan::New("ndef").ToLocalChecked(),
   // Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_write)).ToLocalChecked());
+
+  Nan::Set(obj, Nan::New("erase").ToLocalChecked(),
+  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(erase_write)).ToLocalChecked());
 
   info.GetReturnValue().Set(obj);
 }
