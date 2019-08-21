@@ -3,7 +3,7 @@
 
 #include <nan.h>
 
-enum writeType { page, ndef, erase };
+enum class writeType  { page, ndef, erase };
 
 struct pageWriteOptions {
   int index;
