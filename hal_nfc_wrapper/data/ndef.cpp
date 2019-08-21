@@ -1,7 +1,6 @@
 #include <nan.h>
 #include "../nfc.h"
 #include "ndef.h"
-#include "ndef_parser.h"
 
 // Parse NDEF content array
 NAN_METHOD(ndef_to_string) {info.GetReturnValue().Set(Nan::New(nfc_data.ndef.ToString()).ToLocalChecked());}
@@ -29,16 +28,4 @@ v8::Local<v8::Object> ndef_data_js() {
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_to_hex)).ToLocalChecked());
 
   return obj;
-}
-
-// TODO remove
-// ** EXPORTED NFC NDEF OBJECT ** //
-NAN_METHOD(ndef) {
-  v8::Local<v8::Object> obj = Nan::New<v8::Object>();
-
-  // Set Object Properties //
-  Nan::Set(obj, Nan::New("parser").ToLocalChecked(),
-  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_parser)).ToLocalChecked());
-
-  info.GetReturnValue().Set(obj);
 }

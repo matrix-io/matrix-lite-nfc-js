@@ -7,27 +7,35 @@ var matrix = require('@matrix-io/matrix-lite');
 
 console.log(nfc);
 
-var write = nfc.write();
 
-setInterval(()=>{
+// Testing C++ object wrapping
+var thing1 = new nfc.MyObject(10);
+var thing2 = new nfc.MyObject(36);
 
-    nfc.read((code, tag)=>{
-        // Read tag
-        if(code === 256){
-            console.log(tag);
-            matrix.led.set({g:1});
+console.log(thing1);
+console.log(typeof (thing1.getHandle()));
+console.log(typeof (thing1.getHandleConst()));
+console.log(typeof (thing1.getValue()));
 
-            // Write to tag page
-            write.page(15, [39,20,39,39], (activate_code, write_code)=>{
-                console.log("Activate:" + activate_code +" "+ nfc.status(activate_code)+"\n");
-                console.log("Write:" + write_code +" "+nfc.status(write_code));
-            });
-        }
-        // Didn't read tag
-        else if (code === 1024){
-            console.log("no tag found")
-            matrix.led.set();
-        }
-    }, {page: 15});// you can remove what you don't want to read
 
-}, 1000);
+
+// console.log(thing2.getValue());
+
+
+// setInterval(()=>{
+//     nfc.read((code, tag)=>{
+//     //     // Read tag
+//         if(code === 256){
+//             // console.log(tag);
+//             matrix.led.set({g:1});
+//             console.log(tag);
+//         }
+
+//         // Didn't read tag
+//         else if (code === 1024){
+//             console.log("no tag found")
+//             matrix.led.set();
+//         }
+
+//     }, {ndef: true});// you can remove what you don't want to read
+// }, 1000);
