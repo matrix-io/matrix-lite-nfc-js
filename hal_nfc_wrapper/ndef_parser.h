@@ -17,6 +17,8 @@ private:
   static NAN_METHOD(GetHandle);
   static NAN_METHOD(GetHandleConst);
   static NAN_METHOD(GetValue);
+  static NAN_METHOD(Add);
+  
 
   static Nan::Persistent<v8::Function> constructor;
   double value_;
