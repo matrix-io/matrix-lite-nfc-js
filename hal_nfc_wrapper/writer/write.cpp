@@ -1,6 +1,6 @@
 #include "write.h"
 #include <nan.h>
-#include "nfc.h"
+#include "../nfc.h"
 #include<iostream>// TODO remove
 using namespace std;// TODO remove
 

@@ -1,7 +1,7 @@
 #include <nan.h>
 #include "nfc.h"
-#include "read.h"
-#include "write.h"
+#include "reader/read.h"
+#include "writer/write.h"
 #include "ndef_parser.h"
 
 namespace hal = matrix_hal;

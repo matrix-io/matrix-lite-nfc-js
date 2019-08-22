@@ -1,9 +1,7 @@
-#include "read.h"
 #include <nan.h>
-#include "nfc.h"
-#include "data/info.h"
-#include "data/page.h"
-#include "data/ndef.h"
+#include "read.h"
+#include "../nfc.h"
+#include "js_data.h"
 
 class AsyncReader : public Nan::AsyncWorker {
 public:
