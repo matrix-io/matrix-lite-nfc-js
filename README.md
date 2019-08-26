@@ -12,8 +12,9 @@ This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Reading Pages (MIFARE Ultralight & NTAG)
 - [x] Writing Page  (MIFARE Ultralight & NTAG)
 - [x] Reading NDEF  (MIFARE Ultralight & NTAG)
-- [ ] Writing NDEF  (MIFARE Ultralight & NTAG)
-- [ ] NDEF Parser   (MIFARE Ultralight & NTAG)
+- [x] Writing NDEF  (MIFARE Ultralight & NTAG)
+- [x] NDEF Parser   (MIFARE Ultralight & NTAG)
+- [ ] NDEF Record   (MIFARE Ultralight & NTAG)
 
 # Installation
 Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.

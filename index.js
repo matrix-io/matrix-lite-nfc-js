@@ -7,7 +7,6 @@ var matrix = require('@matrix-io/matrix-lite');
 
 console.log(nfc);
 
-
 // Testing C++ object wrapping
 var message = new nfc.ndefParser();
 message.addTextRecord("hola mundo", "es");
@@ -36,12 +35,10 @@ setInterval(()=>{
     nfc.read((code, tag)=>{
         // Read tag
         if(code === 256){
-            // console.log(tag);
             matrix.led.set({g:1});
             console.log(tag);
-            write.ndef(text, (status)=>{
-                console.log(status);
-            });
+            write.page(12,[0,0,0,12]);
+            // write.erase();
         }
 
         // Didn't read tag

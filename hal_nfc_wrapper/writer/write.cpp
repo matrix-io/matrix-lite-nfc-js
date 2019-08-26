@@ -1,9 +1,8 @@
 #include "write.h"
+#include <iostream>
 #include <nan.h>
 #include "../nfc.h"
 #include "../ndef_types/ndef_parser.h"
-#include<iostream>// TODO remove
-using namespace std;// TODO remove
 
 class AsyncWriter : public Nan::AsyncWorker {
 public:
@@ -39,6 +38,12 @@ public:
 
     // Allow other threads to use NFC
     nfc_usage.unlock();
+    
+    // If nonexistant, avoid calling Callback
+    if (callback == nullptr){
+      this->SetErrorMessage("No Callback Given");
+      return;
+    }
   }
 
   void HandleOKCallback() {
@@ -70,6 +75,9 @@ public:
     // Start callback
     Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), argCount, argv);
   }
+
+  // Called if no callback given
+  void HandleErrorCallback() {/*no need to do anything*/}
 };
 
 // Writes a buffer (array of ints) to an NFC page
@@ -92,24 +100,30 @@ NAN_METHOD(page_write){
 
   options.page.data = new_page;
 
-  // Grab callback
-  if (!info[2]->IsFunction()) {Nan::ThrowTypeError("Argument 3 must be a function");return;}
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[2]).ToLocalChecked());
+  // Run async write without callback
+  if (!info[2]->IsFunction())
+    Nan::AsyncQueueWorker(new AsyncWriter(nullptr, options));
 
-  // Run async function
-  Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  // Run async write with callback
+  else {
+    Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[2]).ToLocalChecked());
+    Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  }
 }
 
 // Erases all NDEF data on an NFC tag
 NAN_METHOD(erase_write){
   writeOptions options = {.tag = writeType::erase};
 
-  // Grab callback
-  if (!info[0]->IsFunction()) {Nan::ThrowTypeError("Argument must be a callback");return;}
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+  // Run async write without callback
+  if (!info[0]->IsFunction())
+    Nan::AsyncQueueWorker(new AsyncWriter(nullptr, options));
 
-  // Run async function
-  Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  // Run async write with callback
+  else {
+    Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+    Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  }
 }
 
 // Writes NDEF data, from NDEF parser, to an NFC tag
@@ -124,12 +138,15 @@ NAN_METHOD(ndef_write){
 
   options.ndef.parser = obj1->self();
 
-  // Grab callback
-  if (!info[1]->IsFunction()) {Nan::ThrowTypeError("Argument 2 must be a function");return;}
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[1]).ToLocalChecked());
+  // Run async write without callback
+  if (!info[1]->IsFunction())
+    Nan::AsyncQueueWorker(new AsyncWriter(nullptr, options));
 
-  // Run async function
-  Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  // Run async write with callback
+  else {
+    Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[1]).ToLocalChecked());
+    Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  }
 }
 
 // ** EXPORTED NFC WRITE OBJECT ** //
