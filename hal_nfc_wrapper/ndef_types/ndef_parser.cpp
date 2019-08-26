@@ -1,5 +1,6 @@
 #include <nan.h>
 #include <iostream>
+#include "matrix_nfc/nfc.h"
 #include "../nfc.h"
 #include "ndef_parser.h"
 
@@ -59,6 +60,10 @@ NAN_METHOD(ndef_parser::GetHandleConst) {
   info.GetReturnValue().Set(obj->handle());
 }
 
+matrix_hal::NDEFParser ndef_parser::self() {
+  return ndef_parser_;
+}
+
 //////////////////////////
 // NDEF PARSER METHODS //
 
@@ -94,9 +99,4 @@ NAN_METHOD(ndef_parser::AddUriRecord) {
 NAN_METHOD(ndef_parser::AddEmptyRecord) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   obj->ndef_parser_.AddEmptyRecord();
-}
-
-
-double ndef_parser::value() {
-  // return value_;
 }

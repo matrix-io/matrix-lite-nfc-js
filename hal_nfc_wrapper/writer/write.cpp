@@ -1,6 +1,7 @@
 #include "write.h"
 #include <nan.h>
 #include "../nfc.h"
+#include "../ndef_types/ndef_parser.h"
 #include<iostream>// TODO remove
 using namespace std;// TODO remove
 
@@ -27,7 +28,7 @@ public:
     }
     else if (options.tag == writeType::ndef){
       nfc_status = nfc.Activate();
-      cout << "DOING NDEF WRITE... not finished yet...." << endl;
+      ndef_status = nfc.ndef.Write(&options.ndef.parser);
       nfc.Deactivate();
     }
     else if (options.tag == writeType::erase){
@@ -104,7 +105,7 @@ NAN_METHOD(erase_write){
   writeOptions options = {.tag = writeType::erase};
 
   // Grab callback
-  if (!info[0]->IsFunction()) {Nan::ThrowTypeError("Argument 3 must be a function");return;}
+  if (!info[0]->IsFunction()) {Nan::ThrowTypeError("Argument must be a callback");return;}
   Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
 
   // Run async function
@@ -115,7 +116,17 @@ NAN_METHOD(erase_write){
 NAN_METHOD(ndef_write){
   writeOptions options = {.tag = writeType::ndef};
 
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+  Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
+
+  // Grab NDEF parser
+  if (maybe1.IsEmpty()) {Nan::ThrowTypeError("Argument 1 must be an ndefParser");return;}
+  ndef_parser* obj1 = Nan::ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
+
+  options.ndef.parser = obj1->self();
+
+  // Grab callback
+  if (!info[1]->IsFunction()) {Nan::ThrowTypeError("Argument 2 must be a function");return;}
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[1]).ToLocalChecked());
 
   // Run async function
   Nan::AsyncQueueWorker(new AsyncWriter(callback, options));

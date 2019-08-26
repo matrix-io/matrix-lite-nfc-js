@@ -28,14 +28,20 @@ message2.addTextRecord("world");
 
 
 
+var write = nfc.write();
+var text = new nfc.ndefParser();
+text.addUriRecord("http://community.matrix.one");
 
 setInterval(()=>{
     nfc.read((code, tag)=>{
-    //     // Read tag
+        // Read tag
         if(code === 256){
             // console.log(tag);
             matrix.led.set({g:1});
             console.log(tag);
+            write.ndef(text, (status)=>{
+                console.log(status);
+            });
         }
 
         // Didn't read tag
