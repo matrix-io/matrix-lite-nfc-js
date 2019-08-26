@@ -52,10 +52,10 @@ public:
     // Prevent V8 objects from being garbage collected
     Nan::HandleScope scope;
 
-    // Return scanned NFC data
+    // Will contain objects of the NFC data scanned
     v8::Local<v8::Object> tag_data = Nan::New<v8::Object>();
 
-    // Create NFC data & add read status to each data object //
+    // Create an NFC object for each requested type //
     // * Info
     if (options.info) {
       v8::Local<v8::Object> info_data = info_data_js();

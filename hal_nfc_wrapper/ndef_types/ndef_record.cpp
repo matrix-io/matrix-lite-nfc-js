@@ -1,73 +1,75 @@
-#include <nan.h>
-#include "../nfc.h"
-#include "ndef_record.h"
+// NOT IMPLEMENTED //
 
-#include <iostream>// TODO remove
+// #include <nan.h>
+// #include "../nfc.h"
+// #include "ndef_record.h"
 
-// NDEF RECORD OBJECT //
-Nan::Persistent<v8::Function> MyObject::constructor;
+// #include <iostream>// TODO remove
 
-MyObject::MyObject(double value) : value_(value) {}
-MyObject::~MyObject() {}
+// // NDEF RECORD OBJECT //
+// Nan::Persistent<v8::Function> MyObject::constructor;
 
-NAN_MODULE_INIT(MyObject::Init) {
-    v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
-    tpl->SetClassName(Nan::New("MyObject").ToLocalChecked());
-    tpl->InstanceTemplate()->SetInternalFieldCount(1);
+// MyObject::MyObject(double value) : value_(value) {}
+// MyObject::~MyObject() {}
 
-    SetPrototypeMethod(tpl, "getHandle", GetHandle);
-    SetPrototypeMethod(tpl, "getHandleConst", GetHandleConst);
-    SetPrototypeMethod(tpl, "getValue", GetValue);
-    SetPrototypeMethod(tpl, "add", Add);
+// NAN_MODULE_INIT(MyObject::Init) {
+//     v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+//     tpl->SetClassName(Nan::New("MyObject").ToLocalChecked());
+//     tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+//     SetPrototypeMethod(tpl, "getHandle", GetHandle);
+//     SetPrototypeMethod(tpl, "getHandleConst", GetHandleConst);
+//     SetPrototypeMethod(tpl, "getValue", GetValue);
+//     SetPrototypeMethod(tpl, "add", Add);
 
-    Nan::Set(target, Nan::New("MyObject").ToLocalChecked(),
-      Nan::GetFunction(tpl).ToLocalChecked());
-}
+//     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
-NAN_METHOD(MyObject::New) {
-    if (info.IsConstructCall()) {
-      double value = info[0]->IsUndefined() ? 0 : Nan::To<double>(info[0]).FromJust();
+//     Nan::Set(target, Nan::New("MyObject").ToLocalChecked(),
+//       Nan::GetFunction(tpl).ToLocalChecked());
+// }
 
-      MyObject *obj = new MyObject(value);
-      obj->Wrap(info.This());
+// NAN_METHOD(MyObject::New) {
+//     if (info.IsConstructCall()) {
+//       double value = info[0]->IsUndefined() ? 0 : Nan::To<double>(info[0]).FromJust();
 
-      info.GetReturnValue().Set(info.This());
+//       MyObject *obj = new MyObject(value);
+//       obj->Wrap(info.This());
 
-    } else {
-      const int argc = 1;
-      v8::Local<v8::Value> argv[argc] = {info[0]};
-      v8::Local<v8::Function> cons = Nan::New(constructor);
-      info.GetReturnValue().Set(
-          Nan::NewInstance(cons, argc, argv).ToLocalChecked());
-    }
-}
+//       info.GetReturnValue().Set(info.This());
 
-NAN_METHOD(MyObject::GetHandle) {
-    MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
-    info.GetReturnValue().Set(obj->handle());
-}
+//     } else {
+//       const int argc = 1;
+//       v8::Local<v8::Value> argv[argc] = {info[0]};
+//       v8::Local<v8::Function> cons = Nan::New(constructor);
+//       info.GetReturnValue().Set(
+//           Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+//     }
+// }
 
-NAN_METHOD(MyObject::GetHandleConst) {
-    MyObject const *obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
-    info.GetReturnValue().Set(obj->handle());
-}
+// NAN_METHOD(MyObject::GetHandle) {
+//     MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
+//     info.GetReturnValue().Set(obj->handle());
+// }
 
-NAN_METHOD(MyObject::GetValue) {
-    MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
-    info.GetReturnValue().Set(obj->value_);
-}
+// NAN_METHOD(MyObject::GetHandleConst) {
+//     MyObject const *obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
+//     info.GetReturnValue().Set(obj->handle());
+// }
 
-NAN_METHOD(MyObject::Add) {
-    MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
-    obj->value_ += 1;
+// NAN_METHOD(MyObject::GetValue) {
+//     MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
+//     info.GetReturnValue().Set(obj->value_);
+// }
 
-    // std::cout << value_ << std::endl;
+// NAN_METHOD(MyObject::Add) {
+//     MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
+//     obj->value_ += 1;
 
-    info.GetReturnValue().Set(Nan::New(obj->value_));
+//     // std::cout << value_ << std::endl;
+
+//     info.GetReturnValue().Set(Nan::New(obj->value_));
 
 
-    // MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
-    // info.GetReturnValue().Set(obj->value_);
-}
+//     // MyObject* obj = ObjectWrap::Unwrap<MyObject>(info.Holder());
+//     // info.GetReturnValue().Set(obj->value_);
+// }

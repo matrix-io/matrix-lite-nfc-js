@@ -3,10 +3,13 @@
 
 #include <nan.h>
 #include "matrix_nfc/nfc.h"
+#include "../nfc.h"
+
 
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
+  // static NAN_METHOD(NewInstance);
   matrix_hal::NDEFParser self();
 
 private:

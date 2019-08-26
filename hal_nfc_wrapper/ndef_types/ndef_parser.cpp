@@ -1,12 +1,11 @@
 #include <nan.h>
 #include <iostream>
 #include "matrix_nfc/nfc.h"
+#include "matrix_nfc/nfc_data.h"
 #include "../nfc.h"
 #include "ndef_parser.h"
 
-// NDEF PARSER OBJECT //
 Nan::Persistent<v8::Function> ndef_parser::constructor;
-
 ndef_parser::ndef_parser(matrix_hal::NDEFParser ndef_parser) : ndef_parser_(ndef_parser) {}
 ndef_parser::~ndef_parser() {}
 
@@ -31,22 +30,50 @@ NAN_MODULE_INIT(ndef_parser::Init) {
     Nan::GetFunction(tpl).ToLocalChecked());
 }
 
+/* Used if ndefParser is needed as a function return 
+// NAN_METHOD(ndef_parser::NewInstance) {
+//   v8::Local<v8::Function> cons = Nan::New(constructor);
+  
+//   ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser(&nfc_data.ndef));
+//   const int argc = 1;
+//   v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
+  
+//   info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+// }
+
+C++ example
+  #include "../ndef_types/ndef_parser.h"
+  Nan::Set(obj, Nan::New<v8::String>("parser").ToLocalChecked(),Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_parser::NewInstance)).ToLocalChecked());
+*/
+
 // - NDEF initialization logic
 NAN_METHOD(ndef_parser::New) {
   if (info.IsConstructCall()) {
-  //   double value = info[0]->IsUndefined() ? 0 : Nan::To<double>(info[0]).FromJust();
+    // TODO remove
+    if (info[0]->IsNumber()) {
+      std::cout << "Argument is number" << std::endl;  
+      ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser(&nfc_data.ndef));
+      
+      matrix_hal::NDEFParser ndef_parser = matrix_hal::NDEFParser(&nfc_data.ndef);
+      std::cout << "C++ OUTPUT" << std::endl;
+      std::cout << ndef_parser.ToString() << std::endl;
 
+      obj->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
+    }
+    
     ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser());
+    
     obj->Wrap(info.This());
 
     info.GetReturnValue().Set(info.This());
-
-  } else {
+  } 
+  else {
+    std::cout << "not contructor call!!!!" << std::endl;
     const int argc = 1;
     v8::Local<v8::Value> argv[argc] = {info[0]};
     v8::Local<v8::Function> cons = Nan::New(constructor);
-    info.GetReturnValue().Set(
-      Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+    info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
 

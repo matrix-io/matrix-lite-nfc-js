@@ -1,27 +1,29 @@
-#ifndef NDEF_RECORD_H
-#define NDEF_RECORD_H
+// NOT IMPLEMENTED //
 
-#include <nan.h>
-#include "matrix_nfc/nfc.h"
-#include "matrix_nfc/nfc_data.h"
+// #ifndef NDEF_RECORD_H
+// #define NDEF_RECORD_H
 
-class MyObject : public Nan::ObjectWrap {
-public:
-  static NAN_MODULE_INIT(Init);
+// #include <nan.h>
+// #include "matrix_nfc/nfc.h"
+// #include "matrix_nfc/nfc_data.h"
 
-private:
-  explicit MyObject(double value = 0);
-  ~MyObject();
+// class MyObject : public Nan::ObjectWrap {
+// public:
+//   static NAN_MODULE_INIT(Init);
 
-  static NAN_METHOD(New);
-  static NAN_METHOD(GetHandle);
-  static NAN_METHOD(GetHandleConst);
-  static NAN_METHOD(GetValue);
-  static NAN_METHOD(Add);
+// private:
+//   explicit MyObject(double value = 0);
+//   ~MyObject();
+
+//   static NAN_METHOD(New);
+//   static NAN_METHOD(GetHandle);
+//   static NAN_METHOD(GetHandleConst);
+//   static NAN_METHOD(GetValue);
+//   static NAN_METHOD(Add);
   
 
-  static Nan::Persistent<v8::Function> constructor;
-  double value_;
-};
+//   static Nan::Persistent<v8::Function> constructor;
+//   double value_;
+// };
 
-#endif
+// #endif
