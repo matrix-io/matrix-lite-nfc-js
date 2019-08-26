@@ -71,3 +71,7 @@ NAN_METHOD(ndef_parser::Add) {
     // ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
     // info.GetReturnValue().Set(obj->value_);
 }
+
+double ndef_parser::value() {
+    return value_;
+}

@@ -5,7 +5,15 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-console.log(nfc.ndefParser);
+console.log(nfc);
+
+var message = new nfc.ndefParser(20);
+var message2 = new nfc.ndefParser(3);
+
+console.log("message1: " + message.getValue());
+console.log("message2: " + message2.getValue());
+
+console.log(nfc.Sum(message, message2));
 
 // Testing C++ object wrapping
 // var thing1 = new nfc.MyObject();

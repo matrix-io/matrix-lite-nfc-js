@@ -8,6 +8,7 @@
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
+  double value();
 
 private:
   explicit ndef_parser(double value = 0);
