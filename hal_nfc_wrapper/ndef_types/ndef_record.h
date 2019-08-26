@@ -1,5 +1,5 @@
-#ifndef NDEF_PARSER_H
-#define NDEF_PARSER_H
+#ifndef NDEF_RECORD_H
+#define NDEF_RECORD_H
 
 #include <nan.h>
 #include "matrix_nfc/nfc.h"

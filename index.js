@@ -5,22 +5,22 @@
 var nfc = require('./build/Release/addon');
 var matrix = require('@matrix-io/matrix-lite');
 
-console.log(nfc);
+console.log(nfc.ndefParser);
 
 // Testing C++ object wrapping
-var thing1 = new nfc.MyObject();
-var thing2 = new nfc.MyObject(36);
+// var thing1 = new nfc.MyObject();
+// var thing2 = new nfc.MyObject(36);
 
-console.log(thing1);
-console.log(typeof (thing1.getHandle()));
-console.log(typeof (thing1.getHandleConst()));
-console.log(typeof (thing1.getValue()));
+// console.log(thing1);
+// console.log(typeof (thing1.getHandle()));
+// console.log(typeof (thing1.getHandleConst()));
+// console.log(typeof (thing1.getValue()));
 
-console.log("\n\n");
-console.log(thing1.getValue());
-thing1.add();
-console.log("Thing 1: " + thing1.getValue());
-console.log("Thing 2: " + thing2.getValue());
+// console.log("\n\n");
+// console.log(thing1.getValue());
+// thing1.add();
+// console.log("Thing 1: " + thing1.getValue());
+// console.log("Thing 2: " + thing2.getValue());
 
 
 

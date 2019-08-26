@@ -2,7 +2,7 @@
 #include "nfc.h"
 #include "reader/read.h"
 #include "writer/write.h"
-#include "ndef_parser.h"
+#include "ndef_types/ndef_parser.h"
 
 namespace hal = matrix_hal;
 
@@ -26,7 +26,7 @@ NAN_MODULE_INIT(Initialize){
   NAN_EXPORT(target, read);
   NAN_EXPORT(target, write);
 
-  MyObject::Init(target); //TODO change name to ndefParser
+  ndef_parser::Init(target); //TODO change name to ndefParser
 }
 
 // Create a Node module called "addon"
