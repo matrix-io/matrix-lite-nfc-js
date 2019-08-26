@@ -2,6 +2,7 @@
 #define WRITE_H
 
 #include <nan.h>
+#include "matrix_nfc/nfc.h"
 
 enum class writeType  { page, ndef, erase };
 
@@ -10,12 +11,16 @@ struct pageWriteOptions {
   std::vector<uint8_t> data;
 };
 
+struct ndefWriteOptions {
+  matrix_hal::NDEFParser parser;
+};
+
 // Determines which tag write & parameters for that write.
 // Options given are determined by writeType tag.
 struct writeOptions {
   writeType tag;
   pageWriteOptions page;
-  // ndefWriteOptions ndef; // not implemented yet
+  ndefWriteOptions ndef;
 };
 
 NAN_METHOD(write);

@@ -7,33 +7,26 @@ var matrix = require('@matrix-io/matrix-lite');
 
 console.log(nfc);
 
-var message = new nfc.ndefParser(20);
-var message2 = new nfc.ndefParser(3);
-
-console.log("message1: " + message.getValue());
-console.log("message2: " + message2.getValue());
-
-console.log(nfc.Sum(message, message2));
 
 // Testing C++ object wrapping
-// var thing1 = new nfc.MyObject();
-// var thing2 = new nfc.MyObject(36);
+var message = new nfc.ndefParser();
+message.addTextRecord("hola mundo", "es");
+message.addTextRecord("hello world");
+message.addUriRecord("http://docs.matrix.one");
+message.addEmptyRecord();
 
-// console.log(thing1);
-// console.log(typeof (thing1.getHandle()));
-// console.log(typeof (thing1.getHandleConst()));
-// console.log(typeof (thing1.getValue()));
+console.log(message.toString());
 
-// console.log("\n\n");
-// console.log(thing1.getValue());
-// thing1.add();
-// console.log("Thing 1: " + thing1.getValue());
-// console.log("Thing 2: " + thing2.getValue());
+var message2 = new nfc.ndefParser();
+message2.addTextRecord("world");
 
+// console.log("message1: " + message.getValue());
 
 
 
-// console.log(thing2.getValue());
+
+
+
 
 
 setInterval(()=>{

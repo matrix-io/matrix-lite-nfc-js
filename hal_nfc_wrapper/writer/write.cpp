@@ -113,14 +113,12 @@ NAN_METHOD(erase_write){
 
 // Writes NDEF data, from NDEF parser, to an NFC tag
 NAN_METHOD(ndef_write){
-  // writeOptions options {
-  //   .tag = writeType::ndef,
-  // };
+  writeOptions options = {.tag = writeType::ndef};
 
-  // Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
 
-  // // Run async function
-  // Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
+  // Run async function
+  Nan::AsyncQueueWorker(new AsyncWriter(callback, options));
 }
 
 // ** EXPORTED NFC WRITE OBJECT ** //
@@ -131,8 +129,8 @@ NAN_METHOD(write){
   Nan::Set(obj, Nan::New("page").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(page_write)).ToLocalChecked());
 
-  // Nan::Set(obj, Nan::New("ndef").ToLocalChecked(),
-  // Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_write)).ToLocalChecked());
+  Nan::Set(obj, Nan::New("ndef").ToLocalChecked(),
+  Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_write)).ToLocalChecked());
 
   Nan::Set(obj, Nan::New("erase").ToLocalChecked(),
   Nan::GetFunction(Nan::New<v8::FunctionTemplate>(erase_write)).ToLocalChecked());

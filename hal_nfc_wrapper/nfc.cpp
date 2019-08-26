@@ -21,21 +21,21 @@ NAN_METHOD(status) {
 
 // TODO REMOVE
 static NAN_METHOD(Sum) {
-  Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
-  Nan::MaybeLocal<v8::Object> maybe2 = Nan::To<v8::Object>(info[1]);
+  // Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
+  // Nan::MaybeLocal<v8::Object> maybe2 = Nan::To<v8::Object>(info[1]);
 
-  // Quick check:
-  if (maybe1.IsEmpty() || maybe2.IsEmpty()) {
-    // return value is undefined by default
-    return;
-  }
+  // // Quick check:
+  // if (maybe1.IsEmpty() || maybe2.IsEmpty()) {
+  //   // return value is undefined by default
+  //   return;
+  // }
 
-  ndef_parser* obj1 =
-    Nan::ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
-  ndef_parser* obj2 =
-    Nan::ObjectWrap::Unwrap<ndef_parser>(maybe2.ToLocalChecked());
+  // ndef_parser* obj1 =
+  //   Nan::ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
+  // ndef_parser* obj2 =
+  //   Nan::ObjectWrap::Unwrap<ndef_parser>(maybe2.ToLocalChecked());
 
-  info.GetReturnValue().Set(Nan::New(obj1->value() + obj2->value()));
+  // info.GetReturnValue().Set(Nan::New(obj1->value() + obj2->value()));
 }
 
 // Node addon entry point

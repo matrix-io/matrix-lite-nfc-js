@@ -3,7 +3,6 @@
 
 #include <nan.h>
 #include "matrix_nfc/nfc.h"
-#include "matrix_nfc/nfc_data.h"
 
 class ndef_parser : public Nan::ObjectWrap {
 public:
@@ -11,18 +10,19 @@ public:
   double value();
 
 private:
-  explicit ndef_parser(double value = 0);
+  explicit ndef_parser(matrix_hal::NDEFParser ndef_parser = matrix_hal::NDEFParser());
   ~ndef_parser();
 
   static NAN_METHOD(New);
   static NAN_METHOD(GetHandle);
   static NAN_METHOD(GetHandleConst);
-  static NAN_METHOD(GetValue);
-  static NAN_METHOD(Add);
-  
+  static NAN_METHOD(ToString);
+  static NAN_METHOD(AddTextRecord);
+  static NAN_METHOD(AddUriRecord);
+  static NAN_METHOD(AddEmptyRecord);
 
   static Nan::Persistent<v8::Function> constructor;
-  double value_;
+  matrix_hal::NDEFParser ndef_parser_;
 };
 
 #endif
