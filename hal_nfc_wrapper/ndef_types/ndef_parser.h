@@ -8,7 +8,7 @@
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
-  // static NAN_METHOD(NewInstance);
+  // static NAN_METHOD(NewInstance);// not implemented
   matrix_hal::NDEFParser self();
 
 private:
@@ -23,6 +23,7 @@ private:
   static NAN_METHOD(AddUriRecord);
   static NAN_METHOD(AddEmptyRecord);
   static NAN_METHOD(AddMimeMediaRecord);
+  static NAN_METHOD(GetEncodedSize);
 
   static Nan::Persistent<v8::Function> constructor;
   matrix_hal::NDEFParser ndef_parser_;

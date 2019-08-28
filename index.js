@@ -37,35 +37,30 @@ console.log(parser.toString());
 var message = new nfc.ndefParser();
 // message.addTextRecord("hola mundo", "es");
 // message.addMimeMediaRecord("text/json", '{"answer": 42}');
-message.addTextRecord("hello world");
-// message.addUriRecord("http://docs.matrix.one");
+// message.addTextRecord("hello world");
+message.addUriRecord("https://docs.matrix.one"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
 // message.addEmptyRecord();
 
 
-console.log(message.toString());
 
+// var write = nfc.write();
 
+// setInterval(()=>{
+//     nfc.read((code, tag)=>{
+//         // Read tag
+//         if(code === 256){
+//             write.ndef(message);
+//             console.log(tag.ndef.content);
+//             // var text = new nfc.ndefParser(tag.ndef.content);
+//             // console.log(text.toString());
+//             matrix.led.set({g:1});
+//         }
 
+//         // Didn't read tag
+//         else if (code === 1024){
+//             console.log("no tag found")
+//             matrix.led.set();
+//         }
 
-
-var write = nfc.write();
-
-setInterval(()=>{
-    nfc.read((code, tag)=>{
-        // Read tag
-        if(code === 256){
-            write.ndef(message);
-            console.log(tag.ndef.content);
-            // var text = new nfc.ndefParser(tag.ndef.content);
-            // console.log(text.toString());
-            matrix.led.set({g:1});
-        }
-
-        // Didn't read tag
-        else if (code === 1024){
-            console.log("no tag found")
-            matrix.led.set();
-        }
-
-    }, {ndef: true});// you can remove what you don't want to read
-}, 1000);
+//     }, {ndef: true});// you can remove what you don't want to read
+// }, 1000);

@@ -24,6 +24,7 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addUriRecord", AddUriRecord);
   SetPrototypeMethod(tpl, "addEmptyRecord", AddEmptyRecord);
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
+  SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
   
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -31,7 +32,7 @@ NAN_MODULE_INIT(ndef_parser::Init) {
     Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-/* Used if ndefParser is needed as a function return 
+/* Used if a function needs to return an ndef parser
 // NAN_METHOD(ndef_parser::NewInstance) {
 //   v8::Local<v8::Function> cons = Nan::New(constructor);
   
@@ -81,7 +82,7 @@ NAN_METHOD(ndef_parser::New) {
 
   else {
     // Enforce users to use new ndefParser()
-    Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser()");
+    Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser();");
     // const int argc = 1;
     // v8::Local<v8::Value> argv[argc] = {info[0]};
     // v8::Local<v8::Function> cons = Nan::New(constructor);
@@ -150,7 +151,11 @@ NAN_METHOD(ndef_parser::AddMimeMediaRecord) {
   if (!info[1]->IsString()) {Nan::ThrowTypeError("Argument 2 must be a string"); return;}
   std::string payload = *Nan::Utf8String(info[1]);
 
-  // Add to NDEFParser
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   obj->ndef_parser_.AddMimeMediaRecord(mimeType, payload);
+}
+
+NAN_METHOD(ndef_parser::GetEncodedSize) {
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetEncodedSize()));
 }

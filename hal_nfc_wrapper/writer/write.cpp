@@ -67,13 +67,13 @@ public:
 
     // Callback Parameters
     int argCount = 2;
-    v8::Local<v8::Value> argv[] = {
+    v8::Local<v8::Value> argValues[] = {
       Nan::New(nfc_status),
       Nan::New(write_status)
     };
 
     // Start callback
-    Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), argCount, argv);
+    Nan::Call(callback->GetFunction(), Nan::GetCurrentContext()->Global(), argCount, argValues);
   }
 
   // Called if no callback given
