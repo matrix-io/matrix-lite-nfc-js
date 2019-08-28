@@ -25,6 +25,7 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addEmptyRecord", AddEmptyRecord);
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
   SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
+  SetPrototypeMethod(tpl, "getRecordCount", GetRecordCount);
   
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -158,4 +159,9 @@ NAN_METHOD(ndef_parser::AddMimeMediaRecord) {
 NAN_METHOD(ndef_parser::GetEncodedSize) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetEncodedSize()));
+}
+
+NAN_METHOD(ndef_parser::GetRecordCount) {
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }

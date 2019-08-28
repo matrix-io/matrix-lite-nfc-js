@@ -42,6 +42,16 @@ message.addUriRecord("https://docs.matrix.one"); // https://developer.apple.com/
 // message.addEmptyRecord();
 
 
+console.log(message.getRecordCount());
+message.addTextRecord("Hello");
+console.log(message.getRecordCount());
+
+
+
+
+
+
+
 
 // var write = nfc.write();
 
