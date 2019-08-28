@@ -7,8 +7,6 @@ var matrix = require('@matrix-io/matrix-lite');
 
 console.log(nfc);
 
-
-
 var record = new nfc.ndefRecord(12);
 var parser = new nfc.ndefParser(12);
 
@@ -37,13 +35,14 @@ console.log(parser.toString());
 
 // // Testing C++ object wrapping
 var message = new nfc.ndefParser();
-message.addTextRecord("hola mundo", "es");
-// message.addTextRecord("hello world");
+// message.addTextRecord("hola mundo", "es");
+// message.addMimeMediaRecord("text/json", '{"answer": 42}');
+message.addTextRecord("hello world");
 // message.addUriRecord("http://docs.matrix.one");
 // message.addEmptyRecord();
 
 
-
+console.log(message.toString());
 
 
 
@@ -55,12 +54,11 @@ setInterval(()=>{
     nfc.read((code, tag)=>{
         // Read tag
         if(code === 256){
-            console.log(tag.ndef.content)
-            var text = new nfc.ndefParser(tag.ndef.content);
+            write.ndef(message);
+            console.log(tag.ndef.content);
+            // var text = new nfc.ndefParser(tag.ndef.content);
             // console.log(text.toString());
             matrix.led.set({g:1});
-            
-            write.ndef(message);
         }
 
         // Didn't read tag

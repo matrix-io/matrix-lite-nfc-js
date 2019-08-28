@@ -22,6 +22,7 @@ private:
   static NAN_METHOD(AddTextRecord);
   static NAN_METHOD(AddUriRecord);
   static NAN_METHOD(AddEmptyRecord);
+  static NAN_METHOD(AddMimeMediaRecord);
 
   static Nan::Persistent<v8::Function> constructor;
   matrix_hal::NDEFParser ndef_parser_;

@@ -86,7 +86,7 @@ NAN_METHOD(page_write){
 
   // Grab JS page index
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument 1 must be a number");return;}
-  options.page.index = Nan::To<int>(info[0]).FromJust();;
+  options.page.index = Nan::To<int>(info[0]).FromJust();
 
   // Grab new JS page
   if (!info[1]->IsArray()) {Nan::ThrowTypeError("Argument 2 must be an array of 4 ints");return;}

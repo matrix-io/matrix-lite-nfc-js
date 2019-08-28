@@ -23,7 +23,8 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addTextRecord", AddTextRecord);
   SetPrototypeMethod(tpl, "addUriRecord", AddUriRecord);
   SetPrototypeMethod(tpl, "addEmptyRecord", AddEmptyRecord);
-
+  SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
+  
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
   Nan::Set(target, Nan::New("ndefParser").ToLocalChecked(),
@@ -50,7 +51,7 @@ C++ example
 NAN_METHOD(ndef_parser::New) {
   if (info.IsConstructCall()) {
     
-    // Initialize NDEF parser from NDEF content
+    // Initialize NDEFParser from NDEF content
     if (info[0]->IsArray()) {
       // Create NDEF content
       matrix_hal::NDEFContent ndef_content;
@@ -70,7 +71,7 @@ NAN_METHOD(ndef_parser::New) {
 
       return;
     }
-    // Initialize empty NDEF parser
+    // Or initialize empty NDEFParser
     else {
       ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser());
       obj->Wrap(info.This());
@@ -121,11 +122,11 @@ NAN_METHOD(ndef_parser::AddTextRecord) {
 
   // Try to set language
   if (info.Length() == 2 && info[1]->IsString()) {
-    obj->ndef_parser_.AddTextRecord( *Nan::Utf8String(info[0]), *Nan::Utf8String(info[1]) );
+    obj->ndef_parser_.AddTextRecord(*Nan::Utf8String(info[0]), *Nan::Utf8String(info[1]));
   }
   // No langauge specified
   else{
-    obj->ndef_parser_.AddTextRecord( *Nan::Utf8String(info[0]) );
+    obj->ndef_parser_.AddTextRecord(*Nan::Utf8String(info[0]));
   }
 }
 
@@ -139,4 +140,17 @@ NAN_METHOD(ndef_parser::AddUriRecord) {
 NAN_METHOD(ndef_parser::AddEmptyRecord) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   obj->ndef_parser_.AddEmptyRecord();
+}
+
+NAN_METHOD(ndef_parser::AddMimeMediaRecord) {
+  // Grab User args
+  if (!info[0]->IsString()) {Nan::ThrowTypeError("Argument 1 must be a string"); return;}
+  std::string mimeType = *Nan::Utf8String(info[0]);
+
+  if (!info[1]->IsString()) {Nan::ThrowTypeError("Argument 2 must be a string"); return;}
+  std::string payload = *Nan::Utf8String(info[1]);
+
+  // Add to NDEFParser
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  obj->ndef_parser_.AddMimeMediaRecord(mimeType, payload);
 }
