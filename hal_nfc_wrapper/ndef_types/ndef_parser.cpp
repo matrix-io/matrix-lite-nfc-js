@@ -26,7 +26,8 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
   SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
   SetPrototypeMethod(tpl, "getRecordCount", GetRecordCount);
-  
+  SetPrototypeMethod(tpl, "getRecord", GetRecord);
+
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
   Nan::Set(target, Nan::New("ndefParser").ToLocalChecked(),
@@ -52,7 +53,6 @@ C++ example
 // - NDEF initialization logic
 NAN_METHOD(ndef_parser::New) {
   if (info.IsConstructCall()) {
-    
     // Initialize NDEFParser from NDEF content
     if (info[0]->IsArray()) {
       // Create NDEF content
@@ -82,7 +82,7 @@ NAN_METHOD(ndef_parser::New) {
   }
 
   else {
-    // Enforce users to use new ndefParser()
+    // Enforce users to use `new ndefParser()`
     Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser();");
     // const int argc = 1;
     // v8::Local<v8::Value> argv[argc] = {info[0]};
@@ -164,4 +164,15 @@ NAN_METHOD(ndef_parser::GetEncodedSize) {
 NAN_METHOD(ndef_parser::GetRecordCount) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
+}
+
+// TODO implement return value
+NAN_METHOD(ndef_parser::GetRecord) {
+  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Arguments 1 must be a number");return;}
+  int index = Nan::To<int>(info[0]).FromJust();
+
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  // TODO return an NDEF record
+  std::cout << index << std::endl;
+  // info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }

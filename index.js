@@ -8,29 +8,10 @@ var matrix = require('@matrix-io/matrix-lite');
 console.log(nfc);
 
 var record = new nfc.ndefRecord(12);
-var parser = new nfc.ndefParser(12);
+var parser = new nfc.ndefParser();
 
 console.log(record.getValue());
 console.log(parser.toString());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // // Testing C++ object wrapping
@@ -42,9 +23,9 @@ message.addUriRecord("https://docs.matrix.one"); // https://developer.apple.com/
 // message.addEmptyRecord();
 
 
-console.log(message.getRecordCount());
+message.getRecord(21);
 message.addTextRecord("Hello");
-console.log(message.getRecordCount());
+message.getRecord();
 
 
 
