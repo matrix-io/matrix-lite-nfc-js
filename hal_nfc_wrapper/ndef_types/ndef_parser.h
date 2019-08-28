@@ -5,7 +5,6 @@
 #include "matrix_nfc/nfc.h"
 #include "../nfc.h"
 
-
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);

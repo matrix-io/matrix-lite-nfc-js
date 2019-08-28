@@ -130,13 +130,13 @@ NAN_METHOD(erase_write){
 NAN_METHOD(ndef_write){
   writeOptions options = {.tag = writeType::ndef};
 
-  Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
-
-  // Grab NDEF parser
-  if (maybe1.IsEmpty()) {Nan::ThrowTypeError("Argument 1 must be an ndefParser");return;}
-  ndef_parser* obj1 = Nan::ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
-
-  options.ndef.parser = obj1->self();
+  // Check if valid JS NDEF parser
+  Nan::MaybeLocal<v8::Object> maybe_obj = Nan::To<v8::Object>(info[0]);
+  if (maybe_obj.IsEmpty()) {Nan::ThrowTypeError("Argument must be an ndefParser");return;}
+  
+  // Unwrap JS NDEF parser for C++
+  ndef_parser* obj = Nan::ObjectWrap::Unwrap<ndef_parser>(maybe_obj.ToLocalChecked());
+  options.ndef.parser = obj->self();
 
   // Run async write without callback
   if (!info[1]->IsFunction())

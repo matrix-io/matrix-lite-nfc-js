@@ -49,31 +49,42 @@ C++ example
 // - NDEF initialization logic
 NAN_METHOD(ndef_parser::New) {
   if (info.IsConstructCall()) {
-    // TODO remove
-    if (info[0]->IsNumber()) {
-      std::cout << "Argument is number" << std::endl;  
-      ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser(&nfc_data.ndef));
-      
-      matrix_hal::NDEFParser ndef_parser = matrix_hal::NDEFParser(&nfc_data.ndef);
-      std::cout << "C++ OUTPUT" << std::endl;
-      std::cout << ndef_parser.ToString() << std::endl;
+    
+    // Initialize NDEF parser from NDEF content
+    if (info[0]->IsArray()) {
+      // Create NDEF content
+      matrix_hal::NDEFContent ndef_content;
+      ndef_content.valid = true; // assume it's valid
 
+      // Set NDEF content.content from JS array
+      v8::Local<v8::Array> new_content = v8::Local<v8::Array>::Cast(info[0]);
+      for (int i = 0; i < new_content->Length(); i++) {
+        int new_num = Nan::To<int>(Nan::Get(new_content, i).ToLocalChecked()).FromJust();
+        ndef_content.content.push_back(new_num);
+      }
+
+      // Initialize populated NDEF parser
+      ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser(&ndef_content));
+      obj->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
+
+      return;
+    }
+    // Initialize empty NDEF parser
+    else {
+      ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser());
       obj->Wrap(info.This());
       info.GetReturnValue().Set(info.This());
     }
-    
-    ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser());
-    
-    obj->Wrap(info.This());
+  }
 
-    info.GetReturnValue().Set(info.This());
-  } 
   else {
-    std::cout << "not contructor call!!!!" << std::endl;
-    const int argc = 1;
-    v8::Local<v8::Value> argv[argc] = {info[0]};
-    v8::Local<v8::Function> cons = Nan::New(constructor);
-    info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+    // Enforce users to use new ndefParser()
+    Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser()");
+    // const int argc = 1;
+    // v8::Local<v8::Value> argv[argc] = {info[0]};
+    // v8::Local<v8::Function> cons = Nan::New(constructor);
+    // info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
 
@@ -87,6 +98,7 @@ NAN_METHOD(ndef_parser::GetHandleConst) {
   info.GetReturnValue().Set(obj->handle());
 }
 
+// - Retrieve NDEFParser from a JS ndefParser. 
 matrix_hal::NDEFParser ndef_parser::self() {
   return ndef_parser_;
 }
@@ -98,6 +110,7 @@ NAN_METHOD(ndef_parser::ToString) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   
   v8::Local<v8::String> data = Nan::New(obj->ndef_parser_.ToString()).ToLocalChecked();
+  
   info.GetReturnValue().Set(data);
 }
 

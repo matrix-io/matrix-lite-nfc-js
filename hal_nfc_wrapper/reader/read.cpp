@@ -98,7 +98,6 @@ public:
 // - NFC read function for info, page, pages, & NDEF.
 // Calls an async worker for NFC reading after handling user arguments.
 NAN_METHOD(read){
-  // Set all NFC read options to fault
   readOptions options = {false,false,-1,false};
 
   // Ensure object is passed

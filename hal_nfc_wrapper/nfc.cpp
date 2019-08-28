@@ -3,6 +3,7 @@
 #include "reader/read.h"
 #include "writer/write.h"
 #include "ndef_types/ndef_parser.h"
+#include "ndef_types/ndef_record.h"
 
 namespace hal = matrix_hal;
 
@@ -23,6 +24,7 @@ NAN_METHOD(status) {
 NAN_MODULE_INIT(Initialize){
   // Exported JS objects
   ndef_parser::Init(target);
+  ndef_record::Init(target);
 
   // Exported JS functions
   NAN_EXPORT(target, status);
