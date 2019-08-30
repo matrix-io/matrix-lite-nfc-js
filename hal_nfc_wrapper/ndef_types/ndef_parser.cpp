@@ -4,6 +4,7 @@
 #include "matrix_nfc/nfc_data.h"
 #include "../nfc.h"
 #include "ndef_parser.h"
+#include "ndef_record.h"
 
 Nan::Persistent<v8::Function> ndef_parser::constructor;
 ndef_parser::ndef_parser(matrix_hal::NDEFParser ndef_parser) : ndef_parser_(ndef_parser) {}
@@ -34,27 +35,13 @@ NAN_MODULE_INIT(ndef_parser::Init) {
     Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-/* Used if a function needs to return an ndef parser
-// NAN_METHOD(ndef_parser::NewInstance) {
-//   v8::Local<v8::Function> cons = Nan::New(constructor);
-  
-//   ndef_parser *obj = new ndef_parser(matrix_hal::NDEFParser(&nfc_data.ndef));
-//   const int argc = 1;
-//   v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
-  
-//   info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
-// }
-
-C++ example
-  #include "../ndef_types/ndef_parser.h"
-  Nan::Set(obj, Nan::New<v8::String>("parser").ToLocalChecked(),Nan::GetFunction(Nan::New<v8::FunctionTemplate>(ndef_parser::NewInstance)).ToLocalChecked());
-*/
-
-// - NDEF initialization logic
+// - NDEF JS initialization
 NAN_METHOD(ndef_parser::New) {
   if (info.IsConstructCall()) {
+    
     // Initialize NDEFParser from NDEF content
     if (info[0]->IsArray()) {
+
       // Create NDEF content
       matrix_hal::NDEFContent ndef_content;
       ndef_content.valid = true; // assume it's valid
@@ -79,10 +66,11 @@ NAN_METHOD(ndef_parser::New) {
       obj->Wrap(info.This());
       info.GetReturnValue().Set(info.This());
     }
+    
   }
 
+  // Enforce users to use `new ndefParser()`
   else {
-    // Enforce users to use `new ndefParser()`
     Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser();");
     // const int argc = 1;
     // v8::Local<v8::Value> argv[argc] = {info[0]};
@@ -106,8 +94,8 @@ matrix_hal::NDEFParser ndef_parser::self() {
   return ndef_parser_;
 }
 
-//////////////////////////
-// NDEF PARSER METHODS //
+/////////////////////////////
+// NDEF PARSER JS METHODS //
 
 NAN_METHOD(ndef_parser::ToString) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
@@ -168,11 +156,25 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
 
 // TODO implement return value
 NAN_METHOD(ndef_parser::GetRecord) {
-  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Arguments 1 must be a number");return;}
+  // Grab record index
+  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
   int index = Nan::To<int>(info[0]).FromJust();
 
+  // Save desired record
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
-  // TODO return an NDEF record
-  std::cout << index << std::endl;
-  // info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
+  matrix_hal::NDEFRecord new_record = obj->ndef_parser_.GetRecord(index);
+
+  //TODO remove
+  std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
+
+  // Create wrapped C++ NDEFRecord
+  v8::Local<v8::Function> cons = Nan::New(ndef_record::constructor);
+  
+  ndef_record *obj123 = ndef_record::NewInstance(new_record);
+  const int argc = 1;
+  v8::Local<v8::Value> argv[1] = {Nan::New(obj123)};
+  
+  // Return wrapped NDEFRecrod
+
+  info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
 }

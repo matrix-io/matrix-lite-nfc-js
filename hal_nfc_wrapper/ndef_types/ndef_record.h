@@ -7,21 +7,25 @@
 
 class ndef_record : public Nan::ObjectWrap {
 public:
-  static NAN_MODULE_INIT(Init);
-
-private:
-  explicit ndef_record(double value = 0);
+  ndef_record(matrix_hal::NDEFRecord ndef_record = matrix_hal::NDEFRecord());
   ~ndef_record();
 
+  static NAN_MODULE_INIT(Init);
+  static NAN_METHOD(NewInstance);
+  matrix_hal::NDEFRecord self();
+
+  static Nan::Persistent<v8::Function> constructor;
+
+private:
   static NAN_METHOD(New);
   static NAN_METHOD(GetHandle);
   static NAN_METHOD(GetHandleConst);
-  static NAN_METHOD(GetValue);
-  static NAN_METHOD(Add);
+  static NAN_METHOD(GetPayloadLength);
+  static NAN_METHOD(GetPayload);
+  static NAN_METHOD(SetTnf);
+  static NAN_METHOD(GetTnf);
   
-
-  static Nan::Persistent<v8::Function> constructor;
-  double value_;
+  matrix_hal::NDEFRecord ndef_record_;
 };
 
 #endif

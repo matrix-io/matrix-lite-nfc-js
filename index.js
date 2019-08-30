@@ -7,41 +7,32 @@ var matrix = require('@matrix-io/matrix-lite');
 
 console.log(nfc);
 
-var record = new nfc.ndefRecord(12);
-var parser = new nfc.ndefParser();
-
-console.log(record.getValue());
-console.log(parser.toString());
-
+// var record = new nfc.ndefRecord(12);
+// console.log(record);
+// console.log(record.setTnf(2));
+// console.log(record.getTnf());
+// console.log(record.getPayloadLength());
 
 // // Testing C++ object wrapping
 var message = new nfc.ndefParser();
-// message.addTextRecord("hola mundo", "es");
-// message.addMimeMediaRecord("text/json", '{"answer": 42}');
-// message.addTextRecord("hello world");
-message.addUriRecord("https://docs.matrix.one"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
-// message.addEmptyRecord();
-
-
-message.getRecord(21);
+message.addUriRecord("tel:+14085551212"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
 message.addTextRecord("Hello");
-message.getRecord();
+
+var record1 = message.getRecord(0);
+console.log("THE NEW RECORD!");
+// console.log(record1);
+console.log(record1.getPayloadLength());
 
 
-
-
-
-
-
+// message.getRecord();
 
 // var write = nfc.write();
-
 // setInterval(()=>{
 //     nfc.read((code, tag)=>{
 //         // Read tag
 //         if(code === 256){
-//             write.ndef(message);
-//             console.log(tag.ndef.content);
+//             // write.ndef(message);
+//             console.log(tag);
 //             // var text = new nfc.ndefParser(tag.ndef.content);
 //             // console.log(text.toString());
 //             matrix.led.set({g:1});
@@ -53,5 +44,5 @@ message.getRecord();
 //             matrix.led.set();
 //         }
 
-//     }, {ndef: true});// you can remove what you don't want to read
+//     }, {info: true});// you can remove what you don't want to read
 // }, 1000);

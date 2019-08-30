@@ -8,7 +8,6 @@
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
-  // static NAN_METHOD(NewInstance);// not implemented
   matrix_hal::NDEFParser self();
 
 private:
