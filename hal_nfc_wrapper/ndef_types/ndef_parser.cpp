@@ -90,7 +90,7 @@ NAN_METHOD(ndef_parser::GetHandleConst) {
 }
 
 // - Retrieve NDEFParser from a JS ndefParser. 
-matrix_hal::NDEFParser ndef_parser::Self() {
+matrix_hal::NDEFParser ndef_parser::Value() {
   return ndef_parser_;
 }
 
@@ -168,6 +168,6 @@ NAN_METHOD(ndef_parser::GetRecord) {
   std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
 
   // Create wrapped C++ NDEFRecord
-  v8::Local<v8::Object> obj123 = Nan::New<v8::Object>();
+  // Passes a wrapped ndef_parser ... todo fill this in
   ndef_record::NewInstance(info, info.Holder());
 }

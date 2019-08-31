@@ -8,7 +8,7 @@
 class ndef_parser : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
-  matrix_hal::NDEFParser Self();
+  matrix_hal::NDEFParser Value();
 
 private:
   explicit ndef_parser(matrix_hal::NDEFParser ndef_parser = matrix_hal::NDEFParser());

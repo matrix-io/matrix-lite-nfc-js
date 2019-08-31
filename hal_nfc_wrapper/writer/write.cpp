@@ -136,7 +136,7 @@ NAN_METHOD(ndef_write){
   
   // Unwrap JS NDEF parser for C++
   ndef_parser* obj = Nan::ObjectWrap::Unwrap<ndef_parser>(maybe_obj.ToLocalChecked());
-  options.ndef.parser = obj->Self();
+  options.ndef.parser = obj->Value();
 
   // Run async write without callback
   if (!info[1]->IsFunction())

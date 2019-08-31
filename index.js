@@ -25,7 +25,7 @@ var record1 = message.getRecord(2);
 console.log(record1);
 
 console.log("THE NEW RECORD!");
-console.log(record1.getPayloadLength());
+console.log("PAYLOADJS -->", record1.getPayloadLength());
 
 
 // message.getRecord();

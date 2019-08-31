@@ -36,32 +36,41 @@ NAN_MODULE_INIT(ndef_record::Init) {
 
 
 // TODO allow outside files to create NDEFrecord
-void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> new_record) {
+void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> parser) {
   v8::Local<v8::Function> cons = Nan::New(constructor);
-  
-  ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
-  
-  const int argc = 1;
-  v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
 
+  ndef_parser* parser_unwrapped = ObjectWrap::Unwrap<ndef_parser>(parser);
+  int index = Nan::To<int>(info[0]).FromJust();
+  std::cout << "REALPAYLOADLENGTH2:" << parser_unwrapped->Value().GetRecord(2).GetPayloadLength() << std::endl;
+  
+  // ndef_record *obj = new ndef_record(parser_unwrapped->Value().GetRecord(index));
+  
+  const int argc = 2;
+  v8::Local<v8::Value> argv[argc] = {parser, Nan::New(index)};
   info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
-  
-  ndef_parser* obj123 = ObjectWrap::Unwrap<ndef_parser>(new_record);
-  std::cout << "REALPAYLOADLENGTH2:" << obj123->Self().GetRecord(2).GetPayloadLength() << std::endl;
 }
-
-
-
-
-
 
 // - NDEF Record JS initialization
 NAN_METHOD(ndef_record::New) {
   if (info.IsConstructCall()) {
-    std::cout << "NEWWWWWWWWW:" << std::endl;
-    ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
-    obj->Wrap(info.This());
-    info.GetReturnValue().Set(info.This());
+    // Check if record is taken from existing NDEFParser
+    if (info[0]->IsObject()) {
+      std::cout << "DETECTED OBJECT" << std::endl;
+      
+      Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
+      ndef_parser* parser = ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
+
+      ndef_record *obj = new ndef_record(parser->Value().GetRecord(Nan::To<int>(info[1]).FromJust()));
+      obj->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
+    }
+    // Else it's a newly made record
+    else{
+      std::cout << "NEWWWWWWWWW:" << std::endl;
+      ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
+      obj->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
+    }
   }
 
   // Enforce users to use `new ndefRecord()`
@@ -85,7 +94,7 @@ NAN_METHOD(ndef_record::GetHandleConst) {
 }
 
 // - Retrieve NDEFRecord from a JS ndefRecord. 
-matrix_hal::NDEFRecord ndef_record::Self() {
+matrix_hal::NDEFRecord ndef_record::Value() {
   return ndef_record_;
 }
 
