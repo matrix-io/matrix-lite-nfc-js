@@ -19,8 +19,9 @@ message.addUriRecord("tel:+14085551212"); // https://developer.apple.com/documen
 message.addTextRecord("Hello");
 
 var record1 = message.getRecord(0);
+console.log(message.getRecord(0));
+
 console.log("THE NEW RECORD!");
-// console.log(record1);
 console.log(record1.getPayloadLength());
 
 

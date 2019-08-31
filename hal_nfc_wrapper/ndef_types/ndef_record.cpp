@@ -29,33 +29,26 @@ NAN_MODULE_INIT(ndef_record::Init) {
 }
 
 
-NAN_METHOD(ndef_record::NewInstance) {
-  if (info.IsConstructCall()) {
 
-    // // Initialize NDEFParser from NDEF content
-    // if (!info[0]->IsEmpty()) {
-    //   std::cout << "OMG IT IS GOING TO EVENTUALLY WORK SOOOOON" << std::endl;
-    //   ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
-    //   obj->Wrap(info.This());
-    //   info.GetReturnValue().Set(info.This());
-    // }
 
-    // else {
-      ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
-      obj->Wrap(info.This());
-      info.GetReturnValue().Set(info.This());
-    // }
-  }
 
-  // Enforce users to use `new ndefRecord()`
-  else {
-    Nan::ThrowTypeError("ndefRecord must be initialized! -> var thing = new ndefRecord();");
-    // const int argc = 1;
-    // v8::Local<v8::Value> argv[argc] = {info[0]};
-    // v8::Local<v8::Function> cons = Nan::New(constructor);
-    // info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
-  }
+
+
+// TODO allow outside files to create NDEFrecord
+void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, matrix_hal::NDEFRecord *new_record) {
+  v8::Local<v8::Function> cons = Nan::New(constructor);
+  
+  ndef_record *obj = new ndef_record(*new_record);
+  const int argc = 1;
+  v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
+
+  // std::cout << "REALPAYLOADLENGTH2:" << new_record->GetPayloadLength() << std::endl;
+  info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
 }
+
+
+
+
 
 
 
@@ -92,7 +85,7 @@ NAN_METHOD(ndef_record::GetHandleConst) {
 }
 
 // - Retrieve NDEFRecord from a JS ndefRecord. 
-matrix_hal::NDEFRecord ndef_record::self() {
+matrix_hal::NDEFRecord ndef_record::Self() {
   return ndef_record_;
 }
 
@@ -101,6 +94,9 @@ matrix_hal::NDEFRecord ndef_record::self() {
 
 NAN_METHOD(ndef_record::GetPayloadLength) {
   ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
+
+  std::cout << "REALPAYLOADLENGTH3:" << obj->ndef_record_.GetPayloadLength() << std::endl;
+
   info.GetReturnValue().Set(obj->ndef_record_.GetPayloadLength());
 }
 
