@@ -16,12 +16,12 @@ console.log(nfc);
 // // Testing C++ object wrapping
 var message = new nfc.ndefParser();
 message.addUriRecord("tel:+14085551212"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
-message.addTextRecord("Hello");
+message.addTextRecord("Hello2222");
 message.addTextRecord("Hello");
 message.addTextRecord("Hello");
 
 
-var record1 = message.getRecord(0);
+var record1 = message.getRecord(1);
 console.log(record1);
 
 console.log("THE NEW RECORD!");

@@ -31,13 +31,12 @@ NAN_MODULE_INIT(ndef_record::Init) {
 
 // - TODO RENAME this function to somethgin easier to understand
 void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> parser) {
-  // Grab NDEFParser & index
+  // Grab NDEFParser
   ndef_parser* parser_unwrapped = ObjectWrap::Unwrap<ndef_parser>(parser);
-  int index = Nan::To<int>(info[0]).FromJust();
   
-  // Pass grabbed variables into ndef_record constructor
+  // Pass parameters to the ndef_record constructor
   const int argc = 2;
-  v8::Local<v8::Value> argv[argc] = {parser, Nan::New(index)};
+  v8::Local<v8::Value> argv[argc] = {parser, info[0]};// Note that the parameters passed are JS values.
   info.GetReturnValue().Set(Nan::NewInstance(Nan::New(constructor), argc, argv).ToLocalChecked());
 }
 
@@ -59,7 +58,7 @@ NAN_METHOD(ndef_record::New) {
       info.GetReturnValue().Set(info.This());
     }
 
-    // Else it's a newly made record
+    // Else make a new NDEFRecord
     else{
       ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
       obj->Wrap(info.This());
