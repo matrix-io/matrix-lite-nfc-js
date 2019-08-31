@@ -168,5 +168,6 @@ NAN_METHOD(ndef_parser::GetRecord) {
   std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
 
   // Create wrapped C++ NDEFRecord
-  ndef_record::NewInstance(info, &new_record);
+  v8::Local<v8::Object> obj123 = Nan::New<v8::Object>();
+  ndef_record::NewInstance(info, info.Holder());
 }

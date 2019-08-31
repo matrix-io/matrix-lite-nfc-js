@@ -1,6 +1,7 @@
 #include <nan.h>
 #include "../nfc.h"
 #include "ndef_record.h"
+#include "ndef_parser.h"
 
 #include <iostream>// TODO remove
 
@@ -35,17 +36,18 @@ NAN_MODULE_INIT(ndef_record::Init) {
 
 
 // TODO allow outside files to create NDEFrecord
-void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, matrix_hal::NDEFRecord *new_record) {
+void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> new_record) {
   v8::Local<v8::Function> cons = Nan::New(constructor);
   
-  ndef_record *obj = new ndef_record(*new_record);
+  ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
   
   const int argc = 1;
   v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
 
   info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   
-  std::cout << "REALPAYLOADLENGTH2:" << new_record->GetPayloadLength() << std::endl;
+  ndef_parser* obj123 = ObjectWrap::Unwrap<ndef_parser>(new_record);
+  std::cout << "REALPAYLOADLENGTH2:" << obj123->Self().GetRecord(2).GetPayloadLength() << std::endl;
 }
 
 
