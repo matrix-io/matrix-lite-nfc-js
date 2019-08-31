@@ -21,7 +21,7 @@ message.addTextRecord("Hello");
 message.addTextRecord("Hello");
 
 
-var record1 = message.getRecord(2);
+var record1 = message.getRecord(0);
 console.log(record1);
 
 console.log("THE NEW RECORD!");

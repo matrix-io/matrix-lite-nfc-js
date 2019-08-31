@@ -29,57 +29,48 @@ NAN_MODULE_INIT(ndef_record::Init) {
     Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-
-
-
-
-
-
-// TODO allow outside files to create NDEFrecord
+// - TODO RENAME this function to somethgin easier to understand
 void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> parser) {
-  v8::Local<v8::Function> cons = Nan::New(constructor);
-
+  // Grab NDEFParser & index
   ndef_parser* parser_unwrapped = ObjectWrap::Unwrap<ndef_parser>(parser);
   int index = Nan::To<int>(info[0]).FromJust();
-  std::cout << "REALPAYLOADLENGTH2:" << parser_unwrapped->Value().GetRecord(2).GetPayloadLength() << std::endl;
   
-  // ndef_record *obj = new ndef_record(parser_unwrapped->Value().GetRecord(index));
-  
+  // Pass grabbed variables into ndef_record constructor
   const int argc = 2;
   v8::Local<v8::Value> argv[argc] = {parser, Nan::New(index)};
-  info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+  info.GetReturnValue().Set(Nan::NewInstance(Nan::New(constructor), argc, argv).ToLocalChecked());
 }
 
 // - NDEF Record JS initialization
 NAN_METHOD(ndef_record::New) {
   if (info.IsConstructCall()) {
+
     // Check if record is taken from existing NDEFParser
     if (info[0]->IsObject()) {
-      std::cout << "DETECTED OBJECT" << std::endl;
-      
-      Nan::MaybeLocal<v8::Object> maybe1 = Nan::To<v8::Object>(info[0]);
-      ndef_parser* parser = ObjectWrap::Unwrap<ndef_parser>(maybe1.ToLocalChecked());
+      // Unwrap NDEF Parser.
+      // We're going to assume any object passed is an NDEFParser
+      Nan::MaybeLocal<v8::Object> maybe = Nan::To<v8::Object>(info[0]);
+      ndef_parser* parser = ObjectWrap::Unwrap<ndef_parser>(maybe.ToLocalChecked());
 
+      // Create record from NDEFParser index
       ndef_record *obj = new ndef_record(parser->Value().GetRecord(Nan::To<int>(info[1]).FromJust()));
       obj->Wrap(info.This());
+      
       info.GetReturnValue().Set(info.This());
     }
+
     // Else it's a newly made record
     else{
-      std::cout << "NEWWWWWWWWW:" << std::endl;
       ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
       obj->Wrap(info.This());
       info.GetReturnValue().Set(info.This());
     }
+
   }
 
   // Enforce users to use `new ndefRecord()`
   else {
     Nan::ThrowTypeError("ndefRecord must be initialized! -> var thing = new ndefRecord();");
-    // const int argc = 1;
-    // v8::Local<v8::Value> argv[argc] = {info[0]};
-    // v8::Local<v8::Function> cons = Nan::New(constructor);
-    // info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
 

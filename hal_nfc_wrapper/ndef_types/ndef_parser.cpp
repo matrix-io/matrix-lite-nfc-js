@@ -72,10 +72,6 @@ NAN_METHOD(ndef_parser::New) {
   // Enforce users to use `new ndefParser()`
   else {
     Nan::ThrowTypeError("ndefParser must be initialized! -> var thing = new ndefParser();");
-    // const int argc = 1;
-    // v8::Local<v8::Value> argv[argc] = {info[0]};
-    // v8::Local<v8::Function> cons = Nan::New(constructor);
-    // info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
 
@@ -154,7 +150,6 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }
 
-// TODO implement return value
 NAN_METHOD(ndef_parser::GetRecord) {
   // Grab record index
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
@@ -168,6 +163,6 @@ NAN_METHOD(ndef_parser::GetRecord) {
   std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
 
   // Create wrapped C++ NDEFRecord
-  // Passes a wrapped ndef_parser ... todo fill this in
+  // info is passed because NewInstance handles our JS return
   ndef_record::NewInstance(info, info.Holder());
 }
