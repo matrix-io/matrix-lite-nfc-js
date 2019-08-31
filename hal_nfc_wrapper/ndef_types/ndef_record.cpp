@@ -39,15 +39,14 @@ void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, 
   v8::Local<v8::Function> cons = Nan::New(constructor);
   
   ndef_record *obj = new ndef_record(*new_record);
+  
   const int argc = 1;
   v8::Local<v8::Value> argv[1] = {Nan::New(obj)};
 
-  // std::cout << "REALPAYLOADLENGTH2:" << new_record->GetPayloadLength() << std::endl;
   info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
+  
+  std::cout << "REALPAYLOADLENGTH2:" << new_record->GetPayloadLength() << std::endl;
 }
-
-
-
 
 
 
@@ -57,11 +56,10 @@ void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, 
 // - NDEF Record JS initialization
 NAN_METHOD(ndef_record::New) {
   if (info.IsConstructCall()) {
-
+    std::cout << "NEWWWWWWWWW:" << std::endl;
     ndef_record *obj = new ndef_record(matrix_hal::NDEFRecord());
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
-
   }
 
   // Enforce users to use `new ndefRecord()`
@@ -94,9 +92,6 @@ matrix_hal::NDEFRecord ndef_record::Self() {
 
 NAN_METHOD(ndef_record::GetPayloadLength) {
   ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
-
-  std::cout << "REALPAYLOADLENGTH3:" << obj->ndef_record_.GetPayloadLength() << std::endl;
-
   info.GetReturnValue().Set(obj->ndef_record_.GetPayloadLength());
 }
 

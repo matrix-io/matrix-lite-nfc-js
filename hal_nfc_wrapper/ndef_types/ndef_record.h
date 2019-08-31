@@ -8,17 +8,11 @@
 class ndef_record : public Nan::ObjectWrap {
 public:
   static NAN_MODULE_INIT(Init);
-  
-  
-  
-  static void NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, matrix_hal::NDEFRecord *new_record);
-  
-
-  
   matrix_hal::NDEFRecord Self();
+  static void NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, matrix_hal::NDEFRecord *new_record);
 
 private:
-  ndef_record(matrix_hal::NDEFRecord ndef_record = matrix_hal::NDEFRecord());
+  explicit ndef_record(matrix_hal::NDEFRecord ndef_record = matrix_hal::NDEFRecord());
   ~ndef_record();
 
   static NAN_METHOD(New);
