@@ -19,9 +19,12 @@ NAN_MODULE_INIT(ndef_record::Init) {
   SetPrototypeMethod(tpl, "getHandle", GetHandle);
   SetPrototypeMethod(tpl, "getHandleConst", GetHandleConst);
   SetPrototypeMethod(tpl, "getPayloadLength", GetPayloadLength);
-  SetPrototypeMethod(tpl, "getPayload", GetPayload);
+  SetPrototypeMethod(tpl, "getId", GetId);
+  SetPrototypeMethod(tpl, "getIdLength", GetIdLength);
   SetPrototypeMethod(tpl, "getTnf", GetTnf);
   SetPrototypeMethod(tpl, "setTnf", SetTnf);
+  SetPrototypeMethod(tpl, "toString", ToString);
+  SetPrototypeMethod(tpl, "info", Info);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -29,8 +32,8 @@ NAN_MODULE_INIT(ndef_record::Init) {
     Nan::GetFunction(tpl).ToLocalChecked());
 }
 
-// - TODO RENAME this function to somethgin easier to understand
-void ndef_record::NewInstance(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> parser) {
+// - Creates an NDEFRecord from an NDEFParser
+void ndef_record::NewFromParser(const Nan::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Object> parser) {
   // Grab NDEFParser
   ndef_parser* parser_unwrapped = ObjectWrap::Unwrap<ndef_parser>(parser);
   
@@ -88,25 +91,59 @@ matrix_hal::NDEFRecord ndef_record::Value() {
   return ndef_record_;
 }
 
-/////////////////////////////
-// NDEF RECORD JS METHODS //
+//////////////////////////////////////////////////////
+// NDEF RECORD JS METHODS
+//////////////////////////////////////////////////////
 
 NAN_METHOD(ndef_record::GetPayloadLength) {
   ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
   info.GetReturnValue().Set(obj->ndef_record_.GetPayloadLength());
 }
 
-// TODO finish
-NAN_METHOD(ndef_record::GetPayload) {
-  // uint8_t* payload = new uint8_t[payload_size];
+NAN_METHOD(ndef_record::GetId) {
+  ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
+  info.GetReturnValue().Set(Nan::New(obj->ndef_record_.GetId()).ToLocalChecked());
+}
 
-  // ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
-  // info.GetReturnValue().Set(obj->ndef_record_.GetPayloadLength());
+NAN_METHOD(ndef_record::GetIdLength) {
+  ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
+  info.GetReturnValue().Set(obj->ndef_record_.GetIdLength());
 }
 
 NAN_METHOD(ndef_record::GetTnf) {
   ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
-  info.GetReturnValue().Set(obj->ndef_record_.GetTnf());
+  std::string result;
+
+  switch (obj->ndef_record_.GetTnf()) {
+    case TNF_EMPTY:
+        result = "Empty";
+        break;
+    case TNF_WELL_KNOWN:
+        result = "Well Known";
+        break;
+    case TNF_MIME_MEDIA:
+        result = "Mime Media";
+        break;
+    case TNF_ABSOLUTE_URI:
+        result = "Absolute URI";
+        break;
+    case TNF_EXTERNAL_TYPE:
+        result = "External";
+        break;
+    case TNF_UNKNOWN:
+        result = "Unknown";
+        break;
+    case TNF_UNCHANGED:
+        result = "Unchanged";
+        break;
+    case TNF_RESERVED:
+        result = "Reserved";
+        break;
+    default:
+        result = "Unknown TNF";
+  }
+  
+  info.GetReturnValue().Set(Nan::New(result).ToLocalChecked());
 }
 
 NAN_METHOD(ndef_record::SetTnf) {
@@ -115,4 +152,33 @@ NAN_METHOD(ndef_record::SetTnf) {
 
   ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
   obj->ndef_record_.SetTnf(number);
+}
+
+NAN_METHOD(ndef_record::ToString) {
+  ndef_record* obj = ObjectWrap::Unwrap<ndef_record>(info.Holder());
+  info.GetReturnValue().Set(Nan::New(obj->ndef_record_.ToString()).ToLocalChecked());
+}
+
+// - Returns object to access data given by NDEFRecord ToString
+NAN_METHOD(ndef_record::Info) {
+  // TODO ....
+}
+
+
+
+
+//////////////////////////////////////////////////////
+// NDEF Records Paring Functions
+//////////////////////////////////////////////////////
+
+std::string BytesToString(const uint8_t *vec, const uint8_t size) {
+    std::stringstream result;
+    for (int i = 0; i < size; i++) {
+        if ((vec[i] < 0x20) || (vec[i] > 0x7e))
+            result << '.';
+        else
+            result << vec[i];
+    }
+    result << std::flush;
+    return result.str();
 }

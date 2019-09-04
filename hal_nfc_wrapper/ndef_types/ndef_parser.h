@@ -24,6 +24,7 @@ private:
   static NAN_METHOD(AddMimeMediaRecord);
   static NAN_METHOD(GetEncodedSize);
   static NAN_METHOD(GetRecordCount);
+  static NAN_METHOD(Records);
   static NAN_METHOD(GetRecord);
   
   static Nan::Persistent<v8::Function> constructor;

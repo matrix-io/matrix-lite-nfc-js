@@ -20,13 +20,8 @@ message.addTextRecord("Hello2222");
 message.addTextRecord("Hello");
 message.addTextRecord("Hello");
 
-
-var record1 = message.getRecord(1);
-console.log(record1);
-
 console.log("THE NEW RECORD!");
-console.log("PAYLOADJS -->", record1.getPayloadLength());
-
+console.log(message.records());
 
 // message.getRecord();
 

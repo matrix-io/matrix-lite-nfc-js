@@ -27,6 +27,7 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
   SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
   SetPrototypeMethod(tpl, "getRecordCount", GetRecordCount);
+  SetPrototypeMethod(tpl, "records", Records);
   SetPrototypeMethod(tpl, "getRecord", GetRecord);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
@@ -150,6 +151,58 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }
 
+
+
+
+
+
+
+
+
+
+
+// - Returns an array containing data from each NDEF Record
+NAN_METHOD(ndef_parser::Records) {
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  matrix_hal::NDEFParser parser = obj->ndef_parser_;
+
+  v8::Local<v8::Array> result = Nan::New<v8::Array>();
+
+  // Create JS object for each record
+  for (int i = 0; i < parser.GetRecordCount(); i++){
+    matrix_hal::NDEFRecord record= parser.GetRecord(i);
+    v8::Local<v8::Object> record_js = Nan::New<v8::Object>();
+
+    // Set each record property
+    record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());
+
+    // Append record to JS array
+    result->Set(i, record_js);
+  }
+
+  // Return JS array of NDEF record data
+  info.GetReturnValue().Set(result);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// - Returns a new C++ NDEFRecord from a record in NDEFParser.
+// Needed for creating custom NDEF Records. (Not fully implemented)
 NAN_METHOD(ndef_parser::GetRecord) {
   // Grab record index
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
@@ -159,10 +212,7 @@ NAN_METHOD(ndef_parser::GetRecord) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   matrix_hal::NDEFRecord new_record = obj->ndef_parser_.GetRecord(index);
 
-  //TODO remove & fix return result
-  std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
-
   // Create wrapped C++ NDEFRecord
   // info is passed because NewInstance handles our JS return
-  ndef_record::NewInstance(info, info.Holder());
+  ndef_record::NewFromParser(info, info.Holder());
 }
