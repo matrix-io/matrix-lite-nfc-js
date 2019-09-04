@@ -27,7 +27,8 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
   SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
   SetPrototypeMethod(tpl, "getRecordCount", GetRecordCount);
-  SetPrototypeMethod(tpl, "records", Records);
+  SetPrototypeMethod(tpl, "getRecords", GetRecords);
+  SetPrototypeMethod(tpl, "getRecord", GetRecord);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -150,9 +151,8 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }
 
-// TODO finish
 // - Returns an array containing data from each NDEF Record
-NAN_METHOD(ndef_parser::Records) {
+NAN_METHOD(ndef_parser::GetRecords) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
   matrix_hal::NDEFParser parser = obj->ndef_parser_;
 
@@ -164,18 +164,47 @@ NAN_METHOD(ndef_parser::Records) {
     v8::Local<v8::Object> record_js = Nan::New<v8::Object>();
 
     // Set each record property //
-    record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());
-    record_js->Set(Nan::New("tnf").ToLocalChecked(), Nan::New(getTnf(&record)).ToLocalChecked());
-    record_js->Set(Nan::New("typeLength").ToLocalChecked(), Nan::New(getTypeLength(&record)));
-    record_js->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(getPayloadLength(&record)));
-    record_js->Set(Nan::New("IdLength").ToLocalChecked(), Nan::New(getIdLength(&record)));
-    record_js->Set(Nan::New("type").ToLocalChecked(), Nan::New(getType(&record)).ToLocalChecked());
-    record_js->Set(Nan::New("payload").ToLocalChecked(), Nan::New(getPayload(&record)).ToLocalChecked());
+    // record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());// for debugging what should be printed
+    record_js->Set(Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
+    record_js->Set(Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
+    record_js->Set(Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
+    
+    record_js->Set(Nan::New("ByteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
+    record_js->Set(Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
+    record_js->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
+    record_js->Set(Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
 
     // Append record to JS array
     result->Set(i, record_js);
   }
 
   // Return JS array of NDEF record data
+  info.GetReturnValue().Set(result);
+}
+
+// - Returns an object of a single NDEF Record
+NAN_METHOD(ndef_parser::GetRecord) {
+  ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
+  matrix_hal::NDEFParser parser = obj->ndef_parser_;
+
+  // Grab desired index
+  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
+  int index = Nan::To<int>(info[0]).FromJust();
+
+  // Create JS object
+  matrix_hal::NDEFRecord record = parser[index];
+  v8::Local<v8::Object> result = Nan::New<v8::Object>();
+
+  // Set each object property //
+  result->Set(Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
+  result->Set(Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
+  result->Set(Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
+  
+  result->Set(Nan::New("ByteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
+  result->Set(Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
+  result->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
+  result->Set(Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
+
+  // Return JS object
   info.GetReturnValue().Set(result);
 }
