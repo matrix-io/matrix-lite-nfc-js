@@ -150,15 +150,6 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }
 
-
-
-
-
-
-
-
-
-
 // TODO finish
 // - Returns an array containing data from each NDEF Record
 NAN_METHOD(ndef_parser::Records) {
@@ -169,11 +160,17 @@ NAN_METHOD(ndef_parser::Records) {
 
   // Create JS object for each record
   for (int i = 0; i < parser.GetRecordCount(); i++){
-    matrix_hal::NDEFRecord record= parser.GetRecord(i);
+    matrix_hal::NDEFRecord record = parser[i];
     v8::Local<v8::Object> record_js = Nan::New<v8::Object>();
 
-    // Set each record property
+    // Set each record property //
     record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());
+    record_js->Set(Nan::New("tnf").ToLocalChecked(), Nan::New(getTnf(&record)).ToLocalChecked());
+    record_js->Set(Nan::New("typeLength").ToLocalChecked(), Nan::New(getTypeLength(&record)));
+    record_js->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(getPayloadLength(&record)));
+    record_js->Set(Nan::New("IdLength").ToLocalChecked(), Nan::New(getIdLength(&record)));
+    record_js->Set(Nan::New("type").ToLocalChecked(), Nan::New(getType(&record)).ToLocalChecked());
+    record_js->Set(Nan::New("payload").ToLocalChecked(), Nan::New(getPayload(&record)).ToLocalChecked());
 
     // Append record to JS array
     result->Set(i, record_js);

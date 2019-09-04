@@ -11,8 +11,6 @@ console.log(nfc);
 var message = new nfc.ndefParser();
 message.addUriRecord("tel:+14085551212"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
 message.addTextRecord("Hello2222");
-message.addTextRecord("Hello");
-message.addTextRecord("Hello");
 
 console.log("THE NEW RECORD!");
 console.log(message.records());
