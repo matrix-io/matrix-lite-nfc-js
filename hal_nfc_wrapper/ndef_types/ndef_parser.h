@@ -24,7 +24,7 @@ private:
   static NAN_METHOD(AddMimeMediaRecord);
   static NAN_METHOD(GetEncodedSize);
   static NAN_METHOD(GetRecordCount);
-  static NAN_METHOD(GetRecord);
+  static NAN_METHOD(Records);
   
   static Nan::Persistent<v8::Function> constructor;
   matrix_hal::NDEFParser ndef_parser_;

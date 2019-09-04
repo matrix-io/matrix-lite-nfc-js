@@ -27,7 +27,7 @@ NAN_MODULE_INIT(ndef_parser::Init) {
   SetPrototypeMethod(tpl, "addMimeMediaRecord", AddMimeMediaRecord);
   SetPrototypeMethod(tpl, "getEncodedSize", GetEncodedSize);
   SetPrototypeMethod(tpl, "getRecordCount", GetRecordCount);
-  SetPrototypeMethod(tpl, "getRecord", GetRecord);
+  SetPrototypeMethod(tpl, "records", Records);
 
   constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 
@@ -150,19 +150,35 @@ NAN_METHOD(ndef_parser::GetRecordCount) {
   info.GetReturnValue().Set(Nan::New(obj->ndef_parser_.GetRecordCount()));
 }
 
-NAN_METHOD(ndef_parser::GetRecord) {
-  // Grab record index
-  if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
-  int index = Nan::To<int>(info[0]).FromJust();
 
-  // Save desired record
+
+
+
+
+
+
+
+
+// TODO finish
+// - Returns an array containing data from each NDEF Record
+NAN_METHOD(ndef_parser::Records) {
   ndef_parser* obj = ObjectWrap::Unwrap<ndef_parser>(info.Holder());
-  matrix_hal::NDEFRecord new_record = obj->ndef_parser_.GetRecord(index);
+  matrix_hal::NDEFParser parser = obj->ndef_parser_;
 
-  //TODO remove & fix return result
-  std::cout << "REALPAYLOADLENGTH:" << new_record.GetPayloadLength() << std::endl;
+  v8::Local<v8::Array> result = Nan::New<v8::Array>();
 
-  // Create wrapped C++ NDEFRecord
-  // info is passed because NewInstance handles our JS return
-  ndef_record::NewInstance(info, info.Holder());
+  // Create JS object for each record
+  for (int i = 0; i < parser.GetRecordCount(); i++){
+    matrix_hal::NDEFRecord record= parser.GetRecord(i);
+    v8::Local<v8::Object> record_js = Nan::New<v8::Object>();
+
+    // Set each record property
+    record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());
+
+    // Append record to JS array
+    result->Set(i, record_js);
+  }
+
+  // Return JS array of NDEF record data
+  info.GetReturnValue().Set(result);
 }

@@ -24,7 +24,6 @@ NAN_METHOD(status) {
 NAN_MODULE_INIT(Initialize){
   // Exported JS objects
   ndef_parser::Init(target);
-  ndef_record::Init(target);
 
   // Exported JS functions
   NAN_EXPORT(target, status);
