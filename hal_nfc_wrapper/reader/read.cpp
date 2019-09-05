@@ -101,9 +101,9 @@ NAN_METHOD(read){
   readOptions options = {false,false,-1,false};
 
   // Ensure object is passed
-  if (info[1]->IsObject()) {
+  if (info[0]->IsObject()) {
     // Grab object
-    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
+    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[0]).ToLocalChecked();
     v8::Local<v8::String> info_prop  = Nan::New("info").ToLocalChecked();
     v8::Local<v8::String> pages_prop = Nan::New("pages").ToLocalChecked();
     v8::Local<v8::String> page_prop  = Nan::New("page").ToLocalChecked();
@@ -121,13 +121,13 @@ NAN_METHOD(read){
 
     if (Nan::HasOwnProperty(read_options, ndef_prop).FromJust() && Nan::True() == Nan::Get(read_options, ndef_prop).ToLocalChecked())
       options.ndef = true;
-  }
+  } else {Nan::ThrowTypeError(".read argument 1 must be an object");return;}
 
   // Ensure callback is passed
-  if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
+  if (!info[1]->IsFunction()) {Nan::ThrowTypeError(".read argument 2 must be a function");return;}
 
   // Grab callback
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[1]).ToLocalChecked());
 
   // Run async function
   Nan::AsyncQueueWorker(new AsyncReader(callback, options));
