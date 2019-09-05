@@ -5,8 +5,6 @@
 MATRIX Lite NFC JS is an npm package that allows users of varying skill levels to easily program NFC with their MATRIX Creator.
 
 # Roadmap
-`index.js` will contain example code. Note that the usage for this library will change before release.
-
 This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Reading Info  (All tags)
 - [x] Reading Pages (MIFARE Ultralight & NTAG)
