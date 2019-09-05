@@ -41,14 +41,13 @@ npm run build
 
 ## Reading
 ```js
+// Aside from rate, fewer read options improves read speed.
 let options = {
-    // Milliseconds
-    rate: 1000,
-    // Omit what you don't want below (improves performance)
+    rate: 500,
     info: true,     
-    pages: true,
-    page: 0,
-    ndef: true,
+    // pages: true,
+    // page: 0,
+    // ndef: true,
 }
 
 // Start reading
