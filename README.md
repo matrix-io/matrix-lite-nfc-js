@@ -57,19 +57,17 @@ nfc.read.start(options, (code, tag) => {
     
     // Tag Found
     if(code === 256){
-        matrix.led.set({g:1});
+        console.log("Tag Was Scanned");
         console.log(tag);
     }
 
     // Nothing Found
-    else if (code === 1024){
-        matrix.led.set();
+    else if (code === 1024)
         console.log("nothing found");
-    }
 });
 
-// Stop reading
-nfc.read.stop();
+// Stop reading after 10 seconds
+setTimeout(() => {nfc.read.stop()}, 10000);
 ```
 
 ## Writing
