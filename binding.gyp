@@ -16,7 +16,7 @@
       "defines": ["NXPBUILD__PH_RASPBERRY_PI"],
       "cflags_cc": ["-std=c++11"],
       "target_name": "addon",
-      "sources": ["<!@(ls -1 hal_nfc_wrapper/*.cpp)", "<!@(ls -1 hal_nfc_wrapper/data/*.cpp)"],  
+      "sources": ["<!@(ls -1 hal_nfc_wrapper/*.cpp)", "<!@(ls -1 hal_nfc_wrapper/reader/*.cpp)", "<!@(ls -1 hal_nfc_wrapper/writer/*.cpp)", "<!@(ls -1 hal_nfc_wrapper/ndef_types/*.cpp)"],  
     
     }
   ]

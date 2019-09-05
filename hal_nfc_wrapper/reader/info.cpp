@@ -1,6 +1,6 @@
 #include <nan.h>
 #include "../nfc.h"
-#include "info.h"
+#include "js_data.h"
 
 // - Convert nfc.data.info to a JS object
 v8::Local<v8::Object> info_data_js() {

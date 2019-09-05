@@ -1,7 +1,9 @@
 #include <nan.h>
 #include "nfc.h"
-#include "read.h"
-#include "write.h"
+#include "reader/read.h"
+#include "writer/write.h"
+#include "ndef_types/ndef_parser.h"
+#include "ndef_types/ndef_record.h"
 
 namespace hal = matrix_hal;
 
@@ -20,6 +22,9 @@ NAN_METHOD(status) {
 
 // Node addon entry point
 NAN_MODULE_INIT(Initialize){
+  // Exported JS objects
+  ndef_parser::Init(target);
+
   // Exported JS functions
   NAN_EXPORT(target, status);
   NAN_EXPORT(target, read);

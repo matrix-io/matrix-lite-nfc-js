@@ -1,30 +1,54 @@
+const nfc = require('./build/Release/addon');
+
+const read = require('./lib/read.js');
+const write = require('./lib/write.js');
+
+module.exports = {
+    // Returns a string based on number given (used for NFC status codes)
+    'status': nfc.status,
+    'read': read,
+    'write': write,
+    'message': nfc.ndefParser
+};
+
 // UNDER DEVELOPMENT * NOTHING FINAL
 // The code below is a working async read/write example while
 // the library is being finished.
 
-var nfc = require('./build/Release/addon');
-var matrix = require('@matrix-io/matrix-lite');
+// var nfc = require('./build/Release/addon');
+// var matrix = require('@matrix-io/matrix-lite');
 
-var write = nfc.write();
+// console.log(nfc);
 
-setInterval(()=>{
-    nfc.read((code, tag)=>{
-        // Read tag
-        if(code === 256){
-            console.log(tag);
-            matrix.led.set({g:1});
+// // // Testing C++ object wrapping
+// var message = new nfc.ndefParser();
+// message.addUriRecord("tel:+14085551212"); // https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading
+// message.addTextRecord("Hello2222");
 
-            // Write to tag page
-            write.page(15, [12,12,12,12], (activate_code, write_code)=>{
-                console.log("Activate:" + activate_code +" "+ nfc.status(activate_code)+"\n");
-                console.log("Write:" + write_code +" "+nfc.status(write_code));
-            });
-        }
-        // Didn't read tag
-        else if (code === 1024){
-            console.log("no tag found")
-            matrix.led.set();
-        }
-    }, {info: true, pages: true, page: 15, ndef: true});// you can remove what you don't want to read
+// console.log("THE NEW RECORD!");
+// console.log(message.getRecords());
+// console.log(message.getRecord(0));
 
-}, 1000);
+
+// message.getRecord();
+
+// var write = nfc.write();
+// setInterval(()=>{
+//     nfc.read((code, tag)=>{
+//         // Read tag
+//         if(code === 256){
+//             // write.ndef(message);
+//             console.log(tag);
+//             // var text = new nfc.ndefParser(tag.ndef.content);
+//             // console.log(text.toString());
+//             matrix.led.set({g:1});
+//         }
+
+//         // Didn't read tag
+//         else if (code === 1024){
+//             console.log("no tag found")
+//             matrix.led.set();
+//         }
+
+//     }, {info: true});// you can remove what you don't want to read
+// }, 1000);

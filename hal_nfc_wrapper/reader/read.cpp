@@ -1,9 +1,7 @@
-#include "read.h"
 #include <nan.h>
-#include "nfc.h"
-#include "data/info.h"
-#include "data/page.h"
-#include "data/ndef.h"
+#include "read.h"
+#include "../nfc.h"
+#include "js_data.h"
 
 class AsyncReader : public Nan::AsyncWorker {
 public:
@@ -54,10 +52,10 @@ public:
     // Prevent V8 objects from being garbage collected
     Nan::HandleScope scope;
 
-    // Return scanned NFC data
+    // JS object to store all scanned NFC data
     v8::Local<v8::Object> tag_data = Nan::New<v8::Object>();
 
-    // Create NFC data & add read status to each data object //
+    // Create an NFC object for each requested type //
     // * Info
     if (options.info) {
       v8::Local<v8::Object> info_data = info_data_js();
@@ -100,13 +98,12 @@ public:
 // - NFC read function for info, page, pages, & NDEF.
 // Calls an async worker for NFC reading after handling user arguments.
 NAN_METHOD(read){
-  // Set all NFC read options to fault
   readOptions options = {false,false,-1,false};
 
   // Ensure object is passed
-  if (info[1]->IsObject()) {
+  if (info[0]->IsObject()) {
     // Grab object
-    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[1]).ToLocalChecked();
+    v8::Local<v8::Object> read_options = Nan::To<v8::Object>(info[0]).ToLocalChecked();
     v8::Local<v8::String> info_prop  = Nan::New("info").ToLocalChecked();
     v8::Local<v8::String> pages_prop = Nan::New("pages").ToLocalChecked();
     v8::Local<v8::String> page_prop  = Nan::New("page").ToLocalChecked();
@@ -124,13 +121,13 @@ NAN_METHOD(read){
 
     if (Nan::HasOwnProperty(read_options, ndef_prop).FromJust() && Nan::True() == Nan::Get(read_options, ndef_prop).ToLocalChecked())
       options.ndef = true;
-  }
+  } else {Nan::ThrowTypeError(".read argument 1 must be an object");return;}
 
   // Ensure callback is passed
-  if (!info[0]->IsFunction()) {Nan::ThrowTypeError(".read argument 0 must be a function");return;}
+  if (!info[1]->IsFunction()) {Nan::ThrowTypeError(".read argument 2 must be a function");return;}
 
   // Grab callback
-  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[0]).ToLocalChecked());
+  Nan::Callback *callback = new Nan::Callback(Nan::To<v8::Function>(info[1]).ToLocalChecked());
 
   // Run async function
   Nan::AsyncQueueWorker(new AsyncReader(callback, options));
