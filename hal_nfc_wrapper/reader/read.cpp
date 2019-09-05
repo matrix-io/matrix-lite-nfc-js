@@ -59,13 +59,13 @@ public:
     // * Info
     if (options.info) {
       v8::Local<v8::Object> info_data = info_data_js();
-      Nan::Set(info_data, Nan::New("status").ToLocalChecked(), Nan::New(info_status));
+      Nan::Set(info_data, Nan::New("read_status").ToLocalChecked(), Nan::New(info_status));
       Nan::Set(tag_data, Nan::New("info").ToLocalChecked(), info_data);
     }
     // * Pages
     if (options.pages) {
       v8::Local<v8::Object> pages_data = pages_data_js();
-      Nan::Set(pages_data, Nan::New("status").ToLocalChecked(), Nan::New(pages_status));
+      Nan::Set(pages_data, Nan::New("read_status").ToLocalChecked(), Nan::New(pages_status));
       Nan::Set(tag_data, Nan::New("pages").ToLocalChecked(), pages_data);
     }
     // * Page
@@ -76,7 +76,7 @@ public:
     // * NDEF
     if (options.ndef){
       v8::Local<v8::Object> ndef_data = ndef_data_js();
-      Nan::Set(ndef_data, Nan::New("status").ToLocalChecked(), Nan::New(ndef_status));
+      Nan::Set(ndef_data, Nan::New("read_status").ToLocalChecked(), Nan::New(ndef_status));
       Nan::Set(tag_data, Nan::New("ndef").ToLocalChecked(), ndef_data);
     }
 

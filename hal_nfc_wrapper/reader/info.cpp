@@ -8,9 +8,9 @@ v8::Local<v8::Object> info_data_js() {
 
   Nan::Set(obj, Nan::New("technology").ToLocalChecked(), Nan::New(nfc_data.info.technology).ToLocalChecked());
   Nan::Set(obj, Nan::New("type").ToLocalChecked(), Nan::New(nfc_data.info.type).ToLocalChecked());
-  Nan::Set(obj, Nan::New("UID").ToLocalChecked(), Nan::New(nfc_data.info.UIDToHex()).ToLocalChecked());
-  Nan::Set(obj, Nan::New("ATQ").ToLocalChecked(), Nan::New(nfc_data.info.ATQToHex()).ToLocalChecked());
-  Nan::Set(obj, Nan::New("SAK").ToLocalChecked(), Nan::New(nfc_data.info.SAKToHex()).ToLocalChecked());
+  Nan::Set(obj, Nan::New("UID").ToLocalChecked(), Nan::New(nfc_data.info.UIDToHex().erase(0,2)).ToLocalChecked());
+  Nan::Set(obj, Nan::New("ATQ").ToLocalChecked(), Nan::New(nfc_data.info.ATQToHex().erase(0,2)).ToLocalChecked());
+  Nan::Set(obj, Nan::New("SAK").ToLocalChecked(), Nan::New(nfc_data.info.SAKToHex().erase(0,2)).ToLocalChecked());
   Nan::Set(obj, Nan::New("card_family").ToLocalChecked(), Nan::New(nfc_data.info.card_family).ToLocalChecked());
   Nan::Set(obj, Nan::New("IC_type").ToLocalChecked(), Nan::New(nfc_data.info.IC_type).ToLocalChecked());
   Nan::Set(obj, Nan::New("bit_rate").ToLocalChecked(), Nan::New(nfc_data.info.bit_rate));
