@@ -1,11 +1,11 @@
 const nfc = require('./build/Release/addon');
 
-const reader = require('./lib/reader.js');
+const read = require('./lib/read.js');
 
 module.exports = {
     // Returns a string based on number given (used for NFC status codes)
     'status': nfc.status,
-    'reader': reader,
+    'read': read,
 };
 
 // UNDER DEVELOPMENT * NOTHING FINAL
