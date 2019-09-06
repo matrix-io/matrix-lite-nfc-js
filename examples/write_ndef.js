@@ -7,6 +7,7 @@ var msg = new nfc.message();
 msg.addUriRecord("https://community.matrix.one");
 msg.addUriRecord("tel:+14085551212");
 msg.addTextRecord("Hello World");
+msg.addTextRecord("Hola Mundo", "es");
 msg.addMimeMediaRecord("text/json", '{"answer": 42}');
 
 nfc.read.start({rate: 10, info:true}, (code, tag)=>{
