@@ -4,6 +4,10 @@
 
 MATRIX Lite NFC JS is an npm package that allows users of varying skill levels to easily program NFC with their MATRIX Creator.
 
+# Smartphone Apps For Debugging
+- [IOS App](https://apps.apple.com/us/app/nfc-taginfo-by-nxp/id1246143596)
+- [Android App](https://play.google.com/store/apps/details?id=com.nxp.nfc.tagwriter&hl=en_US)
+
 # Roadmap
 This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Reading Info  (All tags)
