@@ -1,6 +1,7 @@
-const nfc = require('../');
+const nfc = require('..');
 
 // Aside from rate, fewer read options improves read speed.
+// At least 1 read option is required.
 var options = {
     rate: 10,
     info: true,
@@ -26,4 +27,7 @@ nfc.read.start(options, (code, tag)=>{
 });
 
 // Stop after 10 seconds
-setTimeout(()=>{nfc.read.stop}, 1000);
+setTimeout(()=>{
+    console.log("Exiting...");
+    nfc.read.stop();
+}, 10000);

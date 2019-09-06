@@ -38,6 +38,7 @@ npm run build
 ```
 
 # Examples
+View the [examples](https://github.com/matrix-io/matrix-lite-nfc-js/tree/master/examples) folder for a better understanding.
 
 ## Reading
 ```js
@@ -72,7 +73,7 @@ setTimeout(() => {nfc.read.stop()}, 10000);
 
 ## Writing
 ```js
-// Manually write to tag's page (make sure you know what you're doing)
+// Manually write to tag's page (make sure you know what you're doing!!!)
 nfc.write.page([0,1,2,3]);// Array represents a byte
 
 // Accepts an ndef
