@@ -76,11 +76,11 @@ setTimeout(() => {nfc.read.stop()}, 10000);
 // Manually write to tag's page (make sure you know what you're doing!!!)
 nfc.write.page([0,1,2,3]);// Array represents a byte
 
-// Accepts an ndef
+// Create & Write an NDEF message
 let message = new nfc.message();
 message.addUriRecord("https://github.com");
 message.addUriRecord("https://community.matrix.one");
-nfc.write.ndef(message);
+nfc.write.message(message);
 
 // Remove all NDEF messages
 nfc.write.erase()

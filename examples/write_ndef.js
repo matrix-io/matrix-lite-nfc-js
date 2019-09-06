@@ -11,6 +11,7 @@ msg.addMimeMediaRecord("text/json", '{"answer": 42}');
 
 nfc.read.start({rate: 10, info:true}, (code, tag)=>{
         if (code === 256){
+            console.log(tag);
             console.log("Tag Was Scanned");
 
             // write.message requires an nfc.message
@@ -20,7 +21,7 @@ nfc.read.start({rate: 10, info:true}, (code, tag)=>{
 
                 // Exit after successful writing
                 if(code.write === 0)
-                    process.exit(1);
+                    process.exit(0);
             });
         }
 

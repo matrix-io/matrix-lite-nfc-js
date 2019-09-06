@@ -1,6 +1,6 @@
 const nfc = require('../');
 
-nfc.read.start({rate: 10, info:true}, (code, tag)=>{
+nfc.read.start({rate: 100, info:true}, (code, tag)=>{
         if (code === 256){
             console.log("Tag Was Scanned");
 
@@ -11,7 +11,7 @@ nfc.read.start({rate: 10, info:true}, (code, tag)=>{
 
                 // Exit after successful writing
                 if(code.write === 0)
-                    process.exit(1);
+                    process.exit(0);
             });
         }
 
