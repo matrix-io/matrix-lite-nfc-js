@@ -73,9 +73,6 @@ setTimeout(() => {nfc.read.stop()}, 10000);
 
 ## Writing
 ```js
-// Manually write to tag's page (make sure you know what you're doing!!!)
-nfc.write.page([0,1,2,3]);// Array represents a byte
-
 // Create & Write an NDEF message
 let message = new nfc.message();
 message.addUriRecord("https://github.com");
@@ -84,4 +81,7 @@ nfc.write.message(message);
 
 // Remove all NDEF messages
 nfc.write.erase()
+
+// Manually write to tag's page (make sure you know what you're doing!!!)
+nfc.write.page([0,1,2,3]);// Array represents a byte
 ```

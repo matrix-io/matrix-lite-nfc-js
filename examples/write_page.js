@@ -1,11 +1,17 @@
+/*
+BE SUPER CAREFUL!
+You might accidentally lock your nfc tag if you don't know what you're doing.
+*/
 const nfc = require('../');
+
+var page_index = 25;
+var page_byte = [48,45,59,21];
 
 nfc.read.start({rate: 100, info:true}, (code, tag)=>{
         if (code === 256){
             console.log("Tag Was Scanned");
 
-            // write.message requires an nfc.message
-            nfc.write.erase().then((code)=>{
+            nfc.write.page(page_index, page_byte).then((code)=>{
                 console.log("Activation Status:" + code.activation + " == " + nfc.status(code.activation));
                 console.log("Write Status:" + code.write + " == " + nfc.status(code.write));
 
