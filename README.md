@@ -1,6 +1,6 @@
 > Under Development
 
-# MATRIX-Lite-JS
+# MATRIX-Lite-NFC-JS
 
 MATRIX Lite NFC JS is an npm package that allows users of varying skill levels to easily program NFC with their MATRIX Creator.
 
