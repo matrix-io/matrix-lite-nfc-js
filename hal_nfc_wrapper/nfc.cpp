@@ -5,6 +5,7 @@
 #include "ndef_types/ndef_parser.h"
 #include "ndef_types/ndef_record.h"
 
+// TODO remove this
 namespace hal = matrix_hal;
 
 matrix_hal::NFC nfc;
