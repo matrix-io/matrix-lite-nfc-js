@@ -92,12 +92,12 @@ msg.addTextRecord("Hello World");
 msg.addTextRecord("Hola Mundo", "es");
 msg.addMimeMediaRecord("text/json", '{"answer": 42}');
 
-// You then pass msg into nfc.write.message();
+// You then pass msg into nfc.write.message(msg);
 ```
 ### 2. Reading an existing NDEF Message
 ```js
 nfc.read.start({ndef:true}, (code, tag) => {
-    // You can create a new NDEF message from what was scanned tag.
+    // You can create a new NDEF message from a scanned tag.
     msg = new nfc.message(tag.ndef.content);
 
     // Once created, you can read any known NDEF record.
