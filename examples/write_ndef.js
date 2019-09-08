@@ -3,7 +3,7 @@ const nfc = require('../');
 // Create an empty NDEF message
 var msg = new nfc.message();
 
-// Add 4 NDEF Records to message
+// Add NDEF Records to message
 msg.addUriRecord("https://community.matrix.one");
 msg.addUriRecord("tel:+14085551212");
 msg.addTextRecord("Hello World");
