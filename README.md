@@ -86,7 +86,8 @@ An NFC constructor that represents an NDEF message. There are 2 uses for this cl
 // Create an empty NDEF message
 let msg = new nfc.message();
 
-// Add 4 NDEF Records to message
+// Add NDEF Records to message
+msg.addUriRecord("https://community.matrix.one");
 msg.addUriRecord("tel:+14085551212");
 msg.addTextRecord("Hello World");
 msg.addTextRecord("Hola Mundo", "es");
