@@ -105,6 +105,9 @@ nfc.read.start({ndef:true}, (code, tag) => {
     console.log(msg.getRecords());
     // or
     console.log(msg.getRecord(0));
+
+    // You see the number of records with
+    // msg.getRecordCount();
 });
 ```
 
