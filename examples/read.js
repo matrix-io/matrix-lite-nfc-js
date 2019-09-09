@@ -2,7 +2,7 @@ const nfc = require('..');
 
 // Aside from rate, fewer read options improves read speed.
 // At least 1 read option is required.
-var options = {
+let options = {
     rate: 10,
     info: true,
     // pages: true,

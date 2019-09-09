@@ -16,7 +16,7 @@ NDEF record from an NDEF message that was read.
 
 const nfc = require('..');
 
-var options = {
+let options = {
     rate: 10,
     ndef: true
 }

@@ -116,7 +116,7 @@ Writing to an NFC tag **should normally be done inside the read loop**.
 
 ### Writing an NDEF message
 ```js
-var msg = new nfc.message();
+let msg = new nfc.message();
 msg.addUriRecord("https://community.matrix.one");
 
 nfc.write.message(msg).then((codes)=>{
@@ -137,8 +137,8 @@ nfc.write.erase().then((codes)=>{
 ### Writing to a tag's page (**WARNING**)
 Be careful when writing to a page. You can accidentally lock your NFC tag!
 ```js
-var page_index = 25;            // page you want to overwrite
-var page_byte = [48,45,59,21];  // Array of numbers that represents a byte
+let page_index = 25;            // page you want to overwrite
+let page_byte = [48,45,59,21];  // Array of numbers that represents a byte
 
 nfc.write.page(page_index, page_byte).then((code)=>{
     // codes.activation : NFC activation status

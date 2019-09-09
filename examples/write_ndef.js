@@ -1,7 +1,7 @@
 const nfc = require('../');
 
 // Create an empty NDEF message
-var msg = new nfc.message();
+let msg = new nfc.message();
 
 // Add NDEF Records to message
 msg.addUriRecord("https://community.matrix.one");

@@ -1,6 +1,6 @@
 const nfc = require('..');
 
-var options = {
+let options = {
     rate: 10,
     pages: true
     // You can request a specific page instead for faster reading
