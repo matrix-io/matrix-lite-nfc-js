@@ -30,7 +30,7 @@ nfc.read.start(options, (code, tag)=>{
             let msg = new nfc.message(tag.ndef.content);
 
             // View an array of all records on tag
-            // console.log(msg.getRecords());
+            console.log(msg.getRecords());
 
             // You can also request a specific record instead
             // let i = msg.getRecordCount() - 1;
