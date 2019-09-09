@@ -1,6 +1,6 @@
 > Under Development
 
-# MATRIX-Lite-JS
+# MATRIX-Lite-NFC-JS
 
 MATRIX Lite NFC JS is an npm package that allows users of varying skill levels to easily program NFC with their MATRIX Creator.
 
@@ -86,18 +86,19 @@ An NFC constructor that represents an NDEF message. There are 2 uses for this cl
 // Create an empty NDEF message
 let msg = new nfc.message();
 
-// Add 4 NDEF Records to message
+// Add NDEF Records to message
+msg.addUriRecord("https://community.matrix.one");
 msg.addUriRecord("tel:+14085551212");
 msg.addTextRecord("Hello World");
 msg.addTextRecord("Hola Mundo", "es");
 msg.addMimeMediaRecord("text/json", '{"answer": 42}');
 
-// You then pass msg into nfc.write.message();
+// You then pass msg into nfc.write.message(msg);
 ```
 ### 2. Reading an existing NDEF Message
 ```js
 nfc.read.start({ndef:true}, (code, tag) => {
-    // You can create a new NDEF message from what was scanned tag.
+    // You can create a new NDEF message from a scanned tag.
     msg = new nfc.message(tag.ndef.content);
 
     // Once created, you can read any known NDEF record.
