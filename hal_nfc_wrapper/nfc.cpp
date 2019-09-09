@@ -5,8 +5,6 @@
 #include "ndef_types/ndef_parser.h"
 #include "ndef_types/ndef_record.h"
 
-namespace hal = matrix_hal;
-
 matrix_hal::NFC nfc;
 matrix_hal::NFCData nfc_data;
 std::mutex nfc_usage;
@@ -17,7 +15,7 @@ NAN_METHOD(status) {
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number"); return;}
 
   int statusCode = Nan::To<int>(info[0]).FromJust();
-  info.GetReturnValue().Set(Nan::New(hal::NFCStatus(statusCode)).ToLocalChecked());
+  info.GetReturnValue().Set(Nan::New(matrix_hal::NFCStatus(statusCode)).ToLocalChecked());
 }
 
 // Node addon entry point
