@@ -16,7 +16,7 @@ NDEF record from an NDEF message that was read.
 
 const nfc = require('..');
 
-var options = {
+let options = {
     rate: 10,
     ndef: true
 }
@@ -33,7 +33,8 @@ nfc.read.start(options, (code, tag)=>{
             console.log(msg.getRecords());
 
             // You can also request a specific record instead
-            // console.log(msg.getRecord(0));
+            // let i = msg.getRecordCount() - 1;
+            // console.log(msg.getRecord(i));
             break;
 
         case 1024:

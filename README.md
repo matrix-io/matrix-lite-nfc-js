@@ -15,7 +15,6 @@ This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Writing Page  (MIFARE Ultralight & NTAG)
 - [x] Reading NDEF  (MIFARE Ultralight & NTAG)
 - [x] Writing NDEF  (MIFARE Ultralight & NTAG)
-- [ ] Upload package to npm
 
 # Installation
 Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
@@ -30,9 +29,9 @@ Install all dependencies.
 npm install
 ```
 
-You can now import the module into any `.js` file. We will eventually create an npm package.
+You can now import the module into any `.js` file.
 ```
-const nfc = require("./matrix-lite-nfc-js");
+const nfc = require("@matrix-io/matrix-lite-nfc-js");
 ```
 
 
@@ -105,6 +104,9 @@ nfc.read.start({ndef:true}, (code, tag) => {
     console.log(msg.getRecords());
     // or
     console.log(msg.getRecord(0));
+
+    // You see the number of records with
+    // msg.getRecordCount();
 });
 ```
 
@@ -113,7 +115,7 @@ Writing to an NFC tag **should normally be done inside the read loop**.
 
 ### Writing an NDEF message
 ```js
-var msg = new nfc.message();
+let msg = new nfc.message();
 msg.addUriRecord("https://community.matrix.one");
 
 nfc.write.message(msg).then((codes)=>{
@@ -134,8 +136,8 @@ nfc.write.erase().then((codes)=>{
 ### Writing to a tag's page (**WARNING**)
 Be careful when writing to a page. You can accidentally lock your NFC tag!
 ```js
-var page_index = 25;            // page you want to overwrite
-var page_byte = [48,45,59,21];  // Array of numbers that represents a byte
+let page_index = 25;            // page you want to overwrite
+let page_byte = [48,45,59,21];  // Array of numbers that represents a byte
 
 nfc.write.page(page_index, page_byte).then((code)=>{
     // codes.activation : NFC activation status
