@@ -15,7 +15,6 @@ This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Writing Page  (MIFARE Ultralight & NTAG)
 - [x] Reading NDEF  (MIFARE Ultralight & NTAG)
 - [x] Writing NDEF  (MIFARE Ultralight & NTAG)
-- [ ] Upload package to npm
 
 # Installation
 Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
@@ -30,9 +29,9 @@ Install all dependencies.
 npm install
 ```
 
-You can now import the module into any `.js` file. We will eventually create an npm package.
+You can now import the module into any `.js` file.
 ```
-const nfc = require("./matrix-lite-nfc-js");
+const nfc = require("@matrix-io/matrix-lite-nfc-js");
 ```
 
 
