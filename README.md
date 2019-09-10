@@ -29,7 +29,7 @@ npm install
 
 You can now import the module into any `.js` file.
 ```
-const nfc = require("@matrix-io/matrix-lite-nfc-js");
+const nfc = require("@matrix-io/matrix-lite-nfc");
 ```
 
 
