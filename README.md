@@ -56,7 +56,7 @@ There can only be one instance of NFC reading. This is a hardware limitation tha
 ```js
 // Configure what you want to read
 let options = {
-    rate: 100    // Read loop speed (Milliseconds)
+    rate: 100,   // Read loop speed (Milliseconds)
     // At least 1 read options is required. Less options -> faster reading!
     info: true,  // Generic information for any NFC tag
     pages: true, // All page data
