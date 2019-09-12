@@ -138,7 +138,7 @@ nfc.write.page(page_index, page_byte).then((code)=>{
 });
 ```
 
-# Install From Source
+# Building Locally For Development
 Download the repository.
 ```
 git clone https://github.com/matrix-io/matrix-lite-nfc-js
