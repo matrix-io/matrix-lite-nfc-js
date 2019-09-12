@@ -15,29 +15,24 @@ This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Writing NDEF  (MIFARE Ultralight & NTAG)
 
 # Installation
-Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
+1. Install [matrix-hal-nfc](https://github.com/matrix-io/matrix-hal-nfc) to use this library.
 
-Download the repository.
+2. Download and install the latest version of Node.js, using nvm (Node Version Manager)
 ```
-git clone https://github.com/matrix-io/matrix-lite-nfc-js
-```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+. ~/.bashrc
+nvm install node
 
-Install all dependencies.
-```
-npm install
-```
-
-You can now import the module into any `.js` file.
-```
-const nfc = require("@matrix-io/matrix-lite-nfc");
+mkdir myApp
+cd myApp
+npm init -y
 ```
 
+3. Install matrix-lite-nfc-js
+```
+npm install @matrix-io/matrix-lite-nfc --save
+```
 
-# Building
-Compiles any new C++ changes.
-```
-npm run build
-```
 
 # Examples
 View the [examples](https://github.com/matrix-io/matrix-lite-nfc-js/tree/master/examples) folder!
@@ -141,4 +136,25 @@ nfc.write.page(page_index, page_byte).then((code)=>{
     // codes.activation : NFC activation status
     // codes.write      : NFC write status
 });
+```
+
+# Install From Source
+Download the repository.
+```
+git clone https://github.com/matrix-io/matrix-lite-nfc-js
+```
+
+Install all dependencies.
+```
+npm install
+```
+
+You can now import the module into any `.js` file.
+```
+const nfc = require("./PATH_TO_NFC_JS");
+``` 
+
+Use the following command when you need to compile any new C++ changes.
+```
+npm run build
 ```
