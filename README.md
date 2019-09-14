@@ -39,6 +39,11 @@ View the [examples](https://github.com/matrix-io/matrix-lite-nfc-js/tree/master/
 
 # Reference
 
+## Import Statement
+```js
+const nfc = require("@matrix-io/matrix-lite-nfc");
+```
+
 ## nfc.status
 When a read or write function completes, it will return a status code to indicate the result. `nfc.Status` returns a string of what that number means.
 ```
