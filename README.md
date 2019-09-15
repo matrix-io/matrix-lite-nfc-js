@@ -7,7 +7,6 @@ MATRIX Lite NFC JS is an npm package that allows users of varying skill levels t
 - [Android App](https://play.google.com/store/apps/details?id=com.nxp.nfc.tagwriter&hl=en_US)
 
 # Roadmap
-This roadmap is for achieving a basic implementation of the checklist below.
 - [x] Reading Info  (All tags)
 - [x] Reading Pages (MIFARE Ultralight & NTAG)
 - [x] Writing Page  (MIFARE Ultralight & NTAG)
