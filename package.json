@@ -1,6 +1,6 @@
 {
   "name": "@matrix-io/matrix-lite-nfc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "> Read and Write to NFC tags with a MATRIX Creator!",
   "main": "index.js",
   "gypfile": true,
