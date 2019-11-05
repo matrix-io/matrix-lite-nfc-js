@@ -16,7 +16,7 @@ v8::Local<v8::Object> ndef_data_js() {
   // Create NDEF content property
   v8::Local<v8::Array> content = Nan::New<v8::Array>();
   for (int i = 0; i < nfc_data.ndef.content.size(); i++){
-    content->Set(i, Nan::New(nfc_data.ndef.content[i]));
+    Nan::Set(content, i, Nan::New(nfc_data.ndef.content[i]));
   }
   Nan::Set(obj, Nan::New("content").ToLocalChecked(), content);
 

@@ -161,21 +161,20 @@ NAN_METHOD(ndef_parser::GetRecords) {
   // Create JS object for each record
   for (int i = 0; i < parser.GetRecordCount(); i++){
     matrix_hal::NDEFRecord record = parser[i];
-    v8::Local<v8::Object> record_js = Nan::New<v8::Object>();
 
-    // Set each record property //
-    // record_js->Set(Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());// for debugging what should be printed
-    record_js->Set(Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
-    record_js->Set(Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
-    record_js->Set(Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
-    
-    record_js->Set(Nan::New("ByteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
-    record_js->Set(Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
-    record_js->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
-    record_js->Set(Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
+    // create/populate object //
+    v8::Local<v8::Object> obj = Nan::New<v8::Object>();
+    Nan::Set(obj, Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
+    Nan::Set(obj, Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
+    Nan::Set(obj, Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
+    Nan::Set(obj, Nan::New("byteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
+    Nan::Set(obj, Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
+    Nan::Set(obj, Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
+    Nan::Set(obj, Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
+    // Nan::Set(obj, Nan::New("all").ToLocalChecked(), Nan::New(record.ToString()).ToLocalChecked());// for debugging what should be printed
 
-    // Append record to JS array
-    result->Set(i, record_js);
+    // Add new record to JS array
+    Nan::Set(result, i, obj);
   }
 
   // Return JS array of NDEF record data
@@ -191,19 +190,18 @@ NAN_METHOD(ndef_parser::GetRecord) {
   if (!info[0]->IsNumber()) {Nan::ThrowTypeError("Argument must be a number");return;}
   int index = Nan::To<int>(info[0]).FromJust();
 
-  // Create JS object
+  // Create record to copy
   matrix_hal::NDEFRecord record = parser[index];
-  v8::Local<v8::Object> result = Nan::New<v8::Object>();
 
-  // Set each object property //
-  result->Set(Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
-  result->Set(Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
-  result->Set(Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
-  
-  result->Set(Nan::New("ByteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
-  result->Set(Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
-  result->Set(Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
-  result->Set(Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
+  // create/populate object //
+  v8::Local<v8::Object> result = Nan::New<v8::Object>();
+  Nan::Set(result, Nan::New("tnf").ToLocalChecked(),           Nan::New(getTnf(&record)).ToLocalChecked());
+  Nan::Set(result, Nan::New("type").ToLocalChecked(),          Nan::New(record.GetType()).ToLocalChecked());
+  Nan::Set(result, Nan::New("payload").ToLocalChecked(),       Nan::New(record.GetPayload()).ToLocalChecked());
+  Nan::Set(result, Nan::New("byteSize").ToLocalChecked(),      Nan::New(record.GetEncodedSize()));
+  Nan::Set(result, Nan::New("typeLength").ToLocalChecked(),    Nan::New(record.GetTypeLength()));
+  Nan::Set(result, Nan::New("payloadLength").ToLocalChecked(), Nan::New(record.GetPayloadLength()));
+  Nan::Set(result, Nan::New("IdLength").ToLocalChecked(),      Nan::New(record.GetIdLength()));
 
   // Return JS object
   info.GetReturnValue().Set(result);

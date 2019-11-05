@@ -8,7 +8,7 @@ v8::Local<v8::Array> page_data_js(std::vector<uint8_t> page) {
   v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
   
   for (int i = 0; i < page.size(); i++){
-    page_js->Set(i, Nan::New(page.at(i)));
+    Nan::Set(page_js, i, Nan::New(page.at(i))); 
   }
 
   return page_js;
@@ -29,10 +29,10 @@ v8::Local<v8::Object> pages_data_js() {
     v8::Local<v8::Array> page_js = Nan::New<v8::Array>();
 
     for (int j = 0; j < nfc_data.pages.content[i].size(); j++){
-      page_js->Set(j, Nan::New(nfc_data.pages.content[i][j]));
+      Nan::Set(page_js, j, Nan::New(nfc_data.pages.content[i][j]));
     }
 
-    pages_js->Set(i, page_js);
+    Nan::Set(pages_js, i, page_js);
   }
 
   Nan::Set(obj, Nan::New("content").ToLocalChecked(), pages_js);
